@@ -1,12 +1,17 @@
 import unittest
-from lib.rmdx_funtions import RMDX as rmdx
-from Interprete.decoder import deco as decoi
+from lib.rmdx_funtions import RMDX 
+from Interprete.decoder import deco 
 
 class Tests(unittest.TestCase):
     
     def test_send_position_degree(self):
-        value = input("ingrese angulo: ")
+
+        #incializar clases
+        rmdx = RMDX()
+        decoi = deco()
         #obtener la trama del angulo
+        value_input = input("ingrese angulo: ")
+        value = float(value_input)  
         data_send = decoi.getDataDegree(value)
         #inicializar motor
         rmdx.setup()
