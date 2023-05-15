@@ -1,4 +1,5 @@
 from lib.rmdx_funtions import RMDX 
+from Interprete.decoder import deco
 
 if __name__ == "__main__":
     rmdx = RMDX()
