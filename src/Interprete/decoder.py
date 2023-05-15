@@ -18,8 +18,8 @@ class deco:
         self.header = 'ValuesConfigs'
 
     def getDataDegree(self,degree):
-        if degree <= 360:
-            unity_conv = 0.01
+        if degree <= 65535:
+            unity_conv = 0.01 #0.01
             pos_LSB = int(degree/unity_conv) #convercion a rago del motor (LSB = low significant bit)
             #data to motor
             data_degree = bytearray([
@@ -34,7 +34,7 @@ class deco:
 
     def getDataSpeed(self,speed):
         unity_conv = 0.01
-        speed_LSB = speed * unity_conv
+        speed_LSB = int(speed * unity_conv)
         data_speed = bytearray([
             speed_LSB & 0xFF,
             (speed_LSB >> 8) & 0xFF,
@@ -55,4 +55,49 @@ class deco:
             return data_torque
         else:
             print("index out of avialable range")
+
+    # --------------------- Lectura de encoder ------------------------
+
+    def readResponseDataPos(self, response):
+
+
+        command_byte = response[0]
+        motor_temp = response[1]
+        torque_current = (response[3] << 8) | response[2]
+        motor_speed = (response[5] << 8) | response[4]
+        encoder_pos = (response[7] << 8) | response[6]
+
+        torque_current_amps = torque_current * 33 / 2048 # Rango -33A a 33A
+
+        response_data = list()
+        response_data.append(command_byte)
+        response_data.append(motor_temp)
+        response_data.append(torque_current_amps)
+        response_data.append(motor_speed)
+        response_data.append(encoder_pos)
+
+        return response_data
+    
+    def readEncoderData(self,response):
+        command_byte = response[0]
+        encoder_position = (response[3] << 8) | response[2]
+        encoder_original_position = (response[5] << 8) | response[4]
+        encoder_offset = (response[7] << 8) | response[6]
+
+        angle_degress = ((encoder_original_position - encoder_offset)* 360)/65535
+
+        response_data = list()
+        response_data.append(command_byte)
+        response_data.append(encoder_position)
+        response_data.append(encoder_original_position)
+        response_data.append(encoder_offset)
+        response_data.append(angle_degress)
+
+        return response_data
+
+        
+        
+        
+
+
 
