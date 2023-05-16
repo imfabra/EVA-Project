@@ -18,9 +18,11 @@ class deco:
         self.header = 'ValuesConfigs'
 
     def getDataDegree(self,degree):
+        #start_angle = 0
         if degree <= 65535:
             unity_conv = 0.01 #0.01
             pos_LSB = int(degree/unity_conv) #convercion a rago del motor (LSB = low significant bit)
+            #start_pos_LSB = int(start_angle/unity_conv)
             #data to motor
             data_degree = bytearray([
                 pos_LSB & 0xFF,
@@ -33,7 +35,7 @@ class deco:
             print("index out of avialable range")
 
     def getDataSpeed(self,speed):
-        unity_conv = 0.01
+        unity_conv = 100
         speed_LSB = int(speed * unity_conv)
         data_speed = bytearray([
             speed_LSB & 0xFF,
