@@ -19,7 +19,7 @@ class deco:
 
     def getDataDegree(self,degree):
         #start_angle = 0
-        if degree <= 65535:
+        if degree <= 360:
             unity_conv = 0.01 #0.01
             pos_LSB = int(degree/unity_conv) #convercion a rago del motor (LSB = low significant bit)
             #start_pos_LSB = int(start_angle/unity_conv)
@@ -28,7 +28,7 @@ class deco:
                 pos_LSB & 0xFF,
                 (pos_LSB >> 8) & 0xFF,
                 (pos_LSB >> 16) & 0xFF,
-                (pos_LSB >> 24) & 0xFF,
+                (pos_LSB >> 24) & 0xFF
             ])
             return data_degree
         else:
@@ -86,14 +86,16 @@ class deco:
         encoder_original_position = (response[5] << 8) | response[4]
         encoder_offset = (response[7] << 8) | response[6]
 
-        angle_degress = ((encoder_original_position - encoder_offset)* 360)/65535
+        angle_degress_m1 = ((encoder_original_position - encoder_offset)* 360)/65535
+        angle_degress_m2 = ((encoder_position - encoder_offset)* 360)/65535
 
         response_data = list()
         response_data.append(command_byte)
         response_data.append(encoder_position)
         response_data.append(encoder_original_position)
         response_data.append(encoder_offset)
-        response_data.append(angle_degress)
+        response_data.append(angle_degress_m1)
+        response_data.append(angle_degress_m2)
 
         return response_data
 
