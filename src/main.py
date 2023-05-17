@@ -2,6 +2,10 @@ from lib.rmdx_funtions import RMDX
 from Interprete.decoder import deco
 import os
 
+
+
+
+
 def send_pos_multi_turns():
     #incializar clases
     rmdx = RMDX()
@@ -116,6 +120,10 @@ options = {
 
 
 if __name__ == "__main__":
+    rmdx = RMDX()
+    motor_list = rmdx.getMotorList()
+    print("MOTORES DISPONIBLES: ", motor_list)
+
     while True:
         menu()
         option = input("Seleccione una opcion: ")
