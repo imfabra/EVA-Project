@@ -100,7 +100,7 @@ def stop_motor():
     rmdx.setup()
     motor_id = 0x142
     rmdx.stopMotor(motor_id)
-    rmdx.offMotor(motor_id)
+    # rmdx.offMotor(motor_id)
 
 def menu():
     print("1. Enviar Posicion Single Turn")

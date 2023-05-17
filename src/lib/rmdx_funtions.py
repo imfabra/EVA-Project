@@ -69,7 +69,7 @@ class RMDX:
             # send message
             self.bus.send(msg)
             time.sleep(0.1)
-            print("MENSAJE: " + str(msg.data))
+            print("MENSAJE ENVIADO: " + str(msg.data))
 
             # ------------------ read message ----------------------
             receive_message = self.bus.recv(10.0)
@@ -80,6 +80,7 @@ class RMDX:
 
             os.system('sudo /sbin/ip link set can0 down')
             print("MENSAJE RECIVIDO : " + str(receive_message.data))
+            print("\n")
             return receive_message
         finally:
             self.bus.shutdown()
