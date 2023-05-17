@@ -64,20 +64,25 @@ class RMDX:
         can_id = motor_id
         data = data_command
         msg = can.Message(arbitration_id=can_id, data=data, is_extended_id=False)
-        # send message
-        self.bus.send(msg)
-        time.sleep(0.1)
-        print("MENSAJE: " + str(msg.data))
 
-        # ------------------ read message ----------------------
-        receive_message = self.bus.recv(10.0)
-        if receive_message is None:
-            print('Timeout occurred, no message.')
+        try: 
+            # send message
+            self.bus.send(msg)
+            time.sleep(0.1)
+            print("MENSAJE: " + str(msg.data))
+
+            # ------------------ read message ----------------------
+            receive_message = self.bus.recv(10.0)
+            if receive_message is None:
+                print('Timeout occurred, no message.')
+                os.system('sudo /sbin/ip link set can0 down')
+                self.bus.shutdown()
+
             os.system('sudo /sbin/ip link set can0 down')
-
-        os.system('sudo /sbin/ip link set can0 down')
-        print("MENSAJE RECIVIDO : " + str(receive_message.data))
-        return receive_message
+            print("MENSAJE RECIVIDO : " + str(receive_message.data))
+            return receive_message
+        finally:
+            self.bus.shutdown()
 
     # def sendToMultiMotor(self,motor_id)
 
