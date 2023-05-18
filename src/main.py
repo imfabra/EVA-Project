@@ -4,19 +4,44 @@ import os
 
 
 
+def send_pos_with_speed():
+    #incializar clases
+    rmdx = RMDX()
+    decoi = deco()
+    #obtener la trama del angulo
+    value_input = input("ingrese angulo Multi turns: ")
+    speed_input = input("ingres velocidad: ")
+    speed = float(speed_input)
+    value = float(value_input)  
+    data_send = decoi.getDataDegreeWhitSpeed(value,speed)
+    #inicializar motor
+    rmdx.setup()
+    motor_id = 0x141
+    #envio del angulo
+    res = rmdx.setPositionClosedLoopWithSpeed(motor_id,data_send)
+    os.system('sudo /sbin/ip link set can0 down')
+    #Leer respuesta de encoder
+    res_list = list()
+    res_list = decoi.readResponseDataPos(res.data)
 
+    print("******************************")
+    print("temp: "+str(res_list[1]))
+    print("current: "+str(res_list[2]))
+    print("speed: "+str(res_list[3]))
+    print("encoder_pos: "+str(res_list[4]))
+    print("******************************")
 
 def send_pos_multi_turns():
     #incializar clases
     rmdx = RMDX()
     decoi = deco()
     #obtener la trama del angulo
-    value_input = input("ingrese angulo: ")
+    value_input = input("ingrese angulo Multi turns: ")
     value = float(value_input)  
     data_send = decoi.getDataDegree(value)
     #inicializar motor
     rmdx.setup()
-    motor_id = 0x142
+    motor_id = 0x141
     #envio del angulo
     res = rmdx.setPositionClosedLoopM(motor_id,data_send)
     os.system('sudo /sbin/ip link set can0 down')
@@ -38,12 +63,12 @@ def send_pos():
     rmdx = RMDX()
     decoi = deco()
     #obtener la trama del angulo
-    value_input = input("ingrese angulo: ")
+    value_input = input("ingrese angulo Single turns: ")
     value = float(value_input)  
     data_send = decoi.getDataDegree(value)
     #inicializar motor
     rmdx.setup()
-    motor_id = 0x142
+    motor_id = 0x141
     #envio del angulo
     res = rmdx.setPositionClosedLoop(motor_id,data_send)
     os.system('sudo /sbin/ip link set can0 down')
@@ -69,7 +94,7 @@ def send_speed():
     data_send = decoi.getDataSpeed(value)
     #inicializar motor
     rmdx.setup()
-    motor_id = 0x142
+    motor_id = 0x141
     #envio del angulo
     res = rmdx.setSpeedClosedLoop(motor_id,data_send)
     os.system('sudo /sbin/ip link set can0 down')
@@ -79,7 +104,7 @@ def read_encoder():
     rmdx = RMDX()
     decoi = deco()
     rmdx.setup()
-    motor_id = 0x142
+    motor_id = 0x141
     encoder = rmdx.getEncoder(motor_id)
     res_encoder = decoi.readEncoderData(encoder.data)
 
@@ -98,9 +123,27 @@ def stop_motor():
     rmdx = RMDX()
     decoi = deco()
     rmdx.setup()
-    motor_id = 0x142
+    motor_id = 0x141
     rmdx.stopMotor(motor_id)
-    # rmdx.offMotor(motor_id)
+    #rmdx.offMotor(motor_id)
+
+def off_motor():
+    os.system('sudo /sbin/ip link set can0 down')
+    rmdx = RMDX()
+    decoi = deco()
+    rmdx.setup()
+    motor_id = 0x141
+    rmdx.offMotor(motor_id)
+    #rmdx.offMotor(motor_id)
+
+def run_motor():
+    os.system('sudo /sbin/ip link set can0 down')
+    rmdx = RMDX()
+    decoi = deco()
+    rmdx.setup()
+    motor_id = 0x141
+    rmdx.runMotor(motor_id)
+    #rmdx.offMotor(motor_id)
 
 def menu():
     print("1. Enviar Posicion Single Turn")
@@ -108,6 +151,9 @@ def menu():
     print("3. Enviar Velocidad")
     print("4. Leer Posicion")
     print("5. Detener motor")
+    print("6. Enviar Posicion con velocidad")
+    print("7. Apagar motor")
+    print("8. Encender motor")
     
 
 options = {
@@ -115,7 +161,10 @@ options = {
     "2" : send_pos_multi_turns,
     "3" : send_speed,
     "4" : read_encoder,
-    "5" : stop_motor
+    "5" : stop_motor,
+    "6" : send_pos_with_speed,
+    "7" : off_motor,
+    "8" : run_motor
 }
 
 
@@ -127,7 +176,7 @@ if __name__ == "__main__":
     while True:
         menu()
         option = input("Seleccione una opcion: ")
-        if option == "6":
+        if option == "9":
             break
         action = options.get(option)
         if action:

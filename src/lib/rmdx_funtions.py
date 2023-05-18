@@ -134,10 +134,17 @@ class RMDX:
         command = getValueConfig(self.header, param)
         message = [command, 0x00, 0x00, 0x00,data[0],data[1],0x00,0x00] #Data[1] 0x00 clockwise 0x01 counterclokwise
         return self.sendToMotor(motor_id,message)
+
+    def setPositionClosedLoopWithSpeed(self, motor_id, data):
+        param = 'send.position.singleTurn.speed' #single turns
+        command = getValueConfig(self.header, param)
+        message = [command, 0x00, data[0], data[1],data[2],data[3],data[4],data[5]] 
+        return self.sendToMotor(motor_id,message)
     
     def setPositionClosedLoopM(self, motor_id, data):
         param = 'send.position.multiTurns' #multi turns
         command = getValueConfig(self.header, param)
+        # message = [command,0x00,0x00,0x00,0x64,0x00,0x00,0x00]
         message = [command, 0x00, 0x00, 0x00,data[0],data[1],data[2],data[3]] #Data[1] 0x00 clockwise 0x01 counterclokwise
         return self.sendToMotor(motor_id,message)
 

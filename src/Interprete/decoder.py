@@ -16,6 +16,24 @@ class deco:
 
     def __init__(self):
         self.header = 'ValuesConfigs'
+    
+    def getDataDegreeWhitSpeed(self,degree,speed):
+        if degree <= 360 and speed <= 10000:
+            unity_conv = 0.01 #0.01
+            pos_LSB = int(degree/unity_conv)
+            speed_LSB = int(speed*1)#LSB
+            data_degree_speed = bytearray([
+                speed_LSB & 0xFF,
+                (speed_LSB >> 8) & 0xFF,
+                pos_LSB & 0xFF,
+                (pos_LSB >> 8) & 0xFF,
+                (pos_LSB >> 16) & 0xFF,
+                (pos_LSB >> 24) & 0xFF
+            ])
+            return data_degree_speed
+        else:
+            print("index out of avialable range")
+
 
     def getDataDegree(self,degree):
         #start_angle = 0
