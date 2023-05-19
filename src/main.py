@@ -4,7 +4,7 @@ import os
 
 
 
-def send_pos_with_speed():
+def send_pos_with_speed(motor_id):
     #incializar clases
     rmdx = RMDX()
     decoi = deco()
@@ -16,7 +16,7 @@ def send_pos_with_speed():
     data_send = decoi.getDataDegreeWhitSpeed(value,speed)
     #inicializar motor
     rmdx.setup()
-    motor_id = 0x141
+    # motor_id = 0x141
     #envio del angulo
     res = rmdx.setPositionClosedLoopWithSpeed(motor_id,data_send)
     os.system('sudo /sbin/ip link set can0 down')
@@ -31,7 +31,7 @@ def send_pos_with_speed():
     print("encoder_pos: "+str(res_list[4]))
     print("******************************")
 
-def send_pos_multi_turns():
+def send_pos_multi_turns(motor_id):
     #incializar clases
     rmdx = RMDX()
     decoi = deco()
@@ -41,7 +41,7 @@ def send_pos_multi_turns():
     data_send = decoi.getDataDegree(value)
     #inicializar motor
     rmdx.setup()
-    motor_id = 0x141
+    # motor_id = 0x141
     #envio del angulo
     res = rmdx.setPositionClosedLoopM(motor_id,data_send)
     os.system('sudo /sbin/ip link set can0 down')
@@ -58,7 +58,7 @@ def send_pos_multi_turns():
         
 
 
-def send_pos():
+def send_pos(motor_id):
     #incializar clases
     rmdx = RMDX()
     decoi = deco()
@@ -68,7 +68,7 @@ def send_pos():
     data_send = decoi.getDataDegree(value)
     #inicializar motor
     rmdx.setup()
-    motor_id = 0x141
+    # motor_id = 0x141
     #envio del angulo
     res = rmdx.setPositionClosedLoop(motor_id,data_send)
     os.system('sudo /sbin/ip link set can0 down')
@@ -85,7 +85,7 @@ def send_pos():
         
 
 
-def send_speed():
+def send_speed(motor_id):
     rmdx = RMDX()
     decoi = deco()
     #obtener la trama del angulo
@@ -94,17 +94,17 @@ def send_speed():
     data_send = decoi.getDataSpeed(value)
     #inicializar motor
     rmdx.setup()
-    motor_id = 0x141
+    # motor_id = 0x141
     #envio del angulo
     res = rmdx.setSpeedClosedLoop(motor_id,data_send)
     os.system('sudo /sbin/ip link set can0 down')
 
-def read_encoder():
+def read_encoder(motor_id):
     os.system('sudo /sbin/ip link set can0 down')
     rmdx = RMDX()
     decoi = deco()
     rmdx.setup()
-    motor_id = 0x141
+    # motor_id = 0x141
     encoder = rmdx.getEncoder(motor_id)
     res_encoder = decoi.readEncoderData(encoder.data)
 
@@ -118,31 +118,31 @@ def read_encoder():
 
     print("******************************")
 
-def stop_motor():
+def stop_motor(motor_id):
     os.system('sudo /sbin/ip link set can0 down')
     rmdx = RMDX()
     decoi = deco()
     rmdx.setup()
-    motor_id = 0x141
+    # motor_id = 0x141
     rmdx.stopMotor(motor_id)
     #rmdx.offMotor(motor_id)
 
-def off_motor():
+def off_motor(motor_id):
     os.system('sudo /sbin/ip link set can0 down')
     rmdx = RMDX()
     decoi = deco()
     rmdx.setup()
-    motor_id = 0x141
+    # motor_id = 0x141
     rmdx.offMotor(motor_id)
     #rmdx.offMotor(motor_id)
 
-def run_motor():
+def set_zero_motor(motor_id):
     os.system('sudo /sbin/ip link set can0 down')
     rmdx = RMDX()
     decoi = deco()
     rmdx.setup()
-    motor_id = 0x141
-    rmdx.runMotor(motor_id)
+    # motor_id = 0x141
+    rmdx.setEncoderOffset(motor_id)
     #rmdx.offMotor(motor_id)
 
 def menu():
@@ -153,7 +153,7 @@ def menu():
     print("5. Detener motor")
     print("6. Enviar Posicion con velocidad")
     print("7. Apagar motor")
-    print("8. Encender motor")
+    print("8. Setear cero")
     
 
 options = {
@@ -164,7 +164,7 @@ options = {
     "5" : stop_motor,
     "6" : send_pos_with_speed,
     "7" : off_motor,
-    "8" : run_motor
+    "8" : set_zero_motor
 }
 
 
@@ -173,14 +173,23 @@ if __name__ == "__main__":
     motor_list = rmdx.getMotorList()
     print("MOTORES DISPONIBLES: ", motor_list)
 
+
+    
+    
+
     while True:
+
+        index = int(input("seleccione un motor (0 al 4): " ))
+        motor_id = motor_list[index]
+        print("El motor seleccionado es: ",motor_id)
+        print("\n")
         menu()
         option = input("Seleccione una opcion: ")
         if option == "9":
             break
         action = options.get(option)
         if action:
-            action()
+            action(motor_id)
         else:
             print("Opcion no valida, seleccione una opcion del menu")
 
