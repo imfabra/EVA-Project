@@ -1,0 +1,16 @@
+# Carpeta virtual environment
+.env/
+
+# Archivos generados automáticamente
+*.pyc
+__pycache__/
+db.sqlite3
+
+# Archivos de configuración local
+settings_local.py
+
+# Archivos de logs
+logs/
+
+# Carpeta de media subida por usuarios
+media/
