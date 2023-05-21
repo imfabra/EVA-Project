@@ -1,0 +1,10 @@
+<h1>Esto es una prueba {{number}}</h1>
+
+<form method="POST" action="{% url 'joins' %}">
+    {% csrf_token %}
+
+    <p>Valor actual: {{ counter }}</p>
+
+    <button type="submit" name="decrement">Decrementar</button>
+    <button type="submit" name="increment">Incrementar</button>
+</form>

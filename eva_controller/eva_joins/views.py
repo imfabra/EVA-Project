@@ -1,5 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 def joins(request):
-    return HttpResponse('Prueba de respuesta basica')
+    if 'counter' not in request.session:
+        request.session['counter'] = 0
+
+    if request.method == 'POST':
+        if 'increment' in request.POST:
+            request.session['counter'] += 1
+        elif 'decrement' in request.POST:
+            request.session['counter'] -= 1
+
+    context = {'number': '123', 'counter': request.session['counter']}
+
+    return render(request, 'eva_joins/joins.html', context)
