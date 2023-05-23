@@ -117,9 +117,28 @@ class deco:
 
         return response_data
 
+    def readEncoderDatatoAngle(self,response):
+        encoder_position = (response[3] << 8) | response[2]
+        encoder_original_position = (response[5] << 8) | response[4]
+        encoder_offset = (response[7] << 8) | response[6]
         
+        resolution = 65535
+        angle_degrees = encoder_position * (360 / resolution)
+        # angle_degrees = (encoder_position - encoder_offset) *(360 / resolution)
+        # angle_degrees = ((encoder_original_position - encoder_offset)* 360)/65535
         
+        response_data = list()
+        response_data.append(encoder_position)
+        response_data.append(encoder_original_position)
+        response_data.append(encoder_offset)
+        response_data.append(angle_degrees)
         
+        return response_data
+
+    def readMultiTurnEncoderZeroOffset(self,response):
+        
+        offset_value = (response[7] << 24) | (response[6] << 16) | (response[5] << 8) | response[4] 
+        return offset_value
 
 
 

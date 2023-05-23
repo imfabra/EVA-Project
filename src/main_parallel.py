@@ -29,6 +29,7 @@ def stop_motor(motor_id):
     rmdx = RMDX()
     rmdx.setup()
     rmdx.stopMotor(motor_id)
+    # rmdx.runMotor(motor_id)
  
 
 def off_motor(motor_id):
@@ -36,7 +37,35 @@ def off_motor(motor_id):
     rmdx = RMDX()
     rmdx.setup()
     rmdx.offMotor(motor_id)
-  
+
+def get_encoder_data(motores):
+    rmdx = RMDX()
+    decoi = deco()
+    rmdx.setup()
+    # motor_id = 0x141
+    index = int(input("seleccione un motor (0 al 4): " ))
+    motor_id = motores[index]
+    encoder = rmdx.getEncoder(motor_id)
+    res_encoder = decoi.readEncoderDatatoAngle(encoder.data)
+
+    print("******************************")
+    
+    print("Encoder Position ",res_encoder[0])
+    print("Encoder Original Position ",res_encoder[1])
+    print("Encoder offset ",res_encoder[2])
+    print("Angulo_m1",res_encoder[3])
+
+def get_offset_value_multiTurn(motores):
+    rmdx = RMDX()
+    decoi = deco()
+    rmdx.setup()
+    # motor_id = 0x141
+    index = int(input("seleccione un motor (0 al 4): " ))
+    motor_id = motores[index]
+    encoder = rmdx.getMultiTurnEncoderOffset(motor_id)
+    res_encoder = decoi.readMultiTurnEncoderZeroOffset(encoder.data)
+    print("*********************************")
+    print("offset_value",res_encoder)
 
 
 # ------------------ Tareas Concurrentes -------------------------------
@@ -49,9 +78,11 @@ def send_motion(motores):
     for motor in motores:
         angulo = int(input("angulo deseado " + str(motor) + ": "))
         angulos.append(angulo)
-        speed = int(input("velocidad deseada " + str(motor) + ": "))
-        speeds.append(speed)
-    
+        # speed = int(input("velocidad deseada " + str(motor) + ": "))
+        # speeds.append(speed)
+    speeds.append(1000)
+    speeds.append(1000)
+    speeds.append(1000)
     #Tareas en paralelo
     with concurrent.futures.ThreadPoolExecutor() as executor:
         movimiento = [] 
@@ -91,11 +122,15 @@ def menu():
     print("1. Enviar Posicion Robot")
     print("2. Apagar motores")
     print("3. Detener/Encender motores")
+    print("4. Leer encoder")
+    print("5. Obtener offset")
 
 options = {
     "1" : send_motion,
     "2" : send_action_off_motor,
-    "3" : send_action_stop_motor
+    "3" : send_action_stop_motor,
+    "4" : get_encoder_data,
+    "5" : get_offset_value_multiTurn
 }
 
 
@@ -112,7 +147,7 @@ if __name__ == "__main__":
 
         menu()
         option = input("Seleccione una opcion: ")
-        if option == "4":
+        if option == "6":
             break
         action = options.get(option)
         if action:
