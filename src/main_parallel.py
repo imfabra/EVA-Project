@@ -4,6 +4,9 @@ from lib.rmdx_funtions import RMDX
 from Interprete.decoder import deco
 import os
 
+
+# ------- Tareas Principales ----------------------------------------------------
+
 def send_pos_with_speed(motor_id,value,speed):
     print(f"Enviando movimiento a {motor_id}: Ángulo {value}, Velocidad {speed}")
     #incializar clases
@@ -18,6 +21,25 @@ def send_pos_with_speed(motor_id,value,speed):
     #Leer respuesta de encoder
     res_list = list()
     res_list = decoi.readResponseDataPos(res.data)
+
+
+
+def stop_motor(motor_id):
+    # os.system('sudo /sbin/ip link set can0 down')
+    rmdx = RMDX()
+    rmdx.setup()
+    rmdx.stopMotor(motor_id)
+ 
+
+def off_motor(motor_id):
+    # os.system('sudo /sbin/ip link set can0 down')
+    rmdx = RMDX()
+    rmdx.setup()
+    rmdx.offMotor(motor_id)
+  
+
+
+# ------------------ Tareas Concurrentes -------------------------------
 
 def send_motion(motores):
     #listas
@@ -40,11 +62,40 @@ def send_motion(motores):
         #esperar a quee todas las tareas se completen
         concurrent.futures.wait(movimiento)
 
+def send_action_off_motor(motores):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        action = [] 
+        for motor in motores:
+            task = executor.submit(off_motor,motor)
+            action.append(task)
+        
+        #esperar a quee todas las tareas se completen
+        concurrent.futures.wait(action)
+
+
+def send_action_stop_motor(motores):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        action = [] 
+        for motor in motores:
+            task = executor.submit(stop_motor,motor)
+            action.append(task)
+        
+        #esperar a quee todas las tareas se completen
+        concurrent.futures.wait(action)
+
+
+
+# ------------------------ Aplicacion --------------------------------------------- 
+
 def menu():
     print("1. Enviar Posicion Robot")
+    print("2. Apagar motores")
+    print("3. Detener/Encender motores")
 
 options = {
     "1" : send_motion,
+    "2" : send_action_off_motor,
+    "3" : send_action_stop_motor
 }
 
 
@@ -61,7 +112,7 @@ if __name__ == "__main__":
 
         menu()
         option = input("Seleccione una opcion: ")
-        if option == "2":
+        if option == "4":
             break
         action = options.get(option)
         if action:
