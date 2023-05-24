@@ -146,3 +146,14 @@ class deco:
         return angle
 
 
+    def getEncoderDataByte(self,encoder_value):
+        data_offset = bytearray([
+                encoder_value & 0xFF,
+                (encoder_value >> 8) & 0xFF,
+                (encoder_value >> 16) & 0xFF,
+                (encoder_value >> 24) & 0xFF
+            ])
+        return data_offset
+
+
+

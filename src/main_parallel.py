@@ -26,6 +26,12 @@ def send_pos_with_speed(motor_id,value,speed):
     res_list = list()
     res_list = decoi.readResponseDataPos(res.data)
 
+def reset_motor(motor_id):
+    rmdx = RMDX()
+    rmdx.setup()
+    rmdx.resetSystemMotor(motor_id)
+
+
 
 
 def stop_motor(motor_id):
@@ -70,6 +76,7 @@ def get_offset_value_multiTurn(motores):
     res_encoder = decoi.readMultiTurnEncoderZeroOffset(encoder.data)
     print("*********************************")
     print("offset_value",res_encoder)
+    return res_encoder
 
 def get_multiTurn_angle_value(motores):
     rmdx = RMDX()
@@ -82,6 +89,17 @@ def get_multiTurn_angle_value(motores):
     res_encoder = decoi.readMultiTurnAngle(encoder.data)
     print("*********************************")
     print("angle_value",res_encoder)
+
+def set_zero_motor(motores):
+    rmdx = RMDX()
+    decoi = deco()
+    rmdx.setup()
+    index = int(input("seleccione un motor (0 al 4): " ))
+    motor_id = motores[index]
+    encoder = rmdx.getMultiTurnEncoderOffset(motor_id)
+    res_encoder = decoi.readMultiTurnEncoderZeroOffset(encoder.data)
+    byte_value = decoi.getEncoderDataByte(res_encoder)
+    res = rmdx.setValueEncoderOffset(byte_value)
 
 
 # ------------------ Tareas Concurrentes -------------------------------
@@ -120,6 +138,16 @@ def send_action_off_motor(motores):
         #esperar a quee todas las tareas se completen
         concurrent.futures.wait(action)
 
+def send_action_reset_motor(motores):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        action = [] 
+        for motor in motores:
+            task = executor.submit(reset_motor,motor)
+            action.append(task)
+        
+        #esperar a quee todas las tareas se completen
+        concurrent.futures.wait(action)
+
 
 def send_action_stop_motor(motores):
     with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -144,6 +172,8 @@ def menu():
     print("4. Leer encoder")
     print("5. Obtener offset")
     print("6. Obtener angulo multivuelta")
+    print("7. Setear Zero del motor")
+    print("8. Resetear motor")
 
 options = {
     "1" : send_motion,
@@ -151,7 +181,9 @@ options = {
     "3" : send_action_stop_motor,
     "4" : get_encoder_data,
     "5" : get_offset_value_multiTurn,
-    "6" : get_multiTurn_angle_value
+    "6" : get_multiTurn_angle_value,
+    "7" : set_zero_motor,
+    "8" : send_action_reset_motor
 }
 
 
@@ -167,7 +199,7 @@ if __name__ == "__main__":
     while True:
         menu()
         option = input("Seleccione una opcion: ")
-        if option == "7":
+        if option == "9":
             break
         action = options.get(option)
         if action:

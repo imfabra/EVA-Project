@@ -112,6 +112,12 @@ class RMDX:
         command = getValueConfig(self.header, param)
         message = [command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         return self.sendToMotor(motor_id, message)
+    
+    def resetSystemMotor(self,motor_id):
+        param = 'motor.reset.system'
+        command = getValueConfig(self.header, param)
+        message = [command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        return self.sendToMotor(motor_id, message)
 
     # ----- current(torque) -----------------
     def setTorqueClosedLoop(self, motor_id, data):
@@ -156,11 +162,18 @@ class RMDX:
         message = [command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         return self.sendToMotor(motor_id, message)
 
-    def setEncoderOffset(self, motor_id):
-        param = 'encoder.setOffset'
+    def setCurrentEncoderOffset(self, motor_id):
+        param = 'encoder.set.current.zero'
         command = getValueConfig(self.header, param)
         message = [command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         return self.sendToMotor(motor_id, message)
+    
+    def setValueEncoderOffset(self,motor_id,data):
+        param = 'encoder.set.value.zero'
+        command = getValueConfig(self.header, param)
+        message = [command, 0x00, 0x00, 0x00,data[0],data[1],data[2],data[3]]
+        return self.sendToMotor(motor_id, message)
+
     
     def getMultiTurnEncoderOffset(self, motor_id):
         param = 'encoder.getMultiOffset'
