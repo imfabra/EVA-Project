@@ -7,6 +7,10 @@ import os
 
 # ------- Tareas Principales ----------------------------------------------------
 
+
+
+
+
 def send_pos_with_speed(motor_id,value,speed):
     print(f"Enviando movimiento a {motor_id}: Ángulo {value}, Velocidad {speed}")
     #incializar clases
@@ -67,6 +71,18 @@ def get_offset_value_multiTurn(motores):
     print("*********************************")
     print("offset_value",res_encoder)
 
+def get_multiTurn_angle_value(motores):
+    rmdx = RMDX()
+    decoi = deco()
+    rmdx.setup()
+    # motor_id = 0x141
+    index = int(input("seleccione un motor (0 al 4): " ))
+    motor_id = motores[index]
+    encoder = rmdx.getMultiTurnAngle(motor_id)
+    res_encoder = decoi.readMultiTurnAngle(encoder.data)
+    print("*********************************")
+    print("angle_value",res_encoder)
+
 
 # ------------------ Tareas Concurrentes -------------------------------
 
@@ -116,6 +132,8 @@ def send_action_stop_motor(motores):
 
 
 
+
+
 # ------------------------ Aplicacion --------------------------------------------- 
 
 def menu():
@@ -124,13 +142,15 @@ def menu():
     print("3. Detener/Encender motores")
     print("4. Leer encoder")
     print("5. Obtener offset")
+    print("6. Obtener angulo multivuelta")
 
 options = {
     "1" : send_motion,
     "2" : send_action_off_motor,
     "3" : send_action_stop_motor,
     "4" : get_encoder_data,
-    "5" : get_offset_value_multiTurn
+    "5" : get_offset_value_multiTurn,
+    "6" : get_multiTurn_angle_value
 }
 
 
@@ -147,7 +167,7 @@ if __name__ == "__main__":
 
         menu()
         option = input("Seleccione una opcion: ")
-        if option == "6":
+        if option == "7":
             break
         action = options.get(option)
         if action:

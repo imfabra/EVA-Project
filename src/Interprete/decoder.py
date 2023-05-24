@@ -139,6 +139,10 @@ class deco:
         
         offset_value = (response[7] << 24) | (response[6] << 16) | (response[5] << 8) | response[4] 
         return offset_value
-
+    
+    def readMultiTurnAngle(self,response):
+        angle_value = (response[7] << 24) | (response[6] << 16) | (response[5] << 8) | response[4] 
+        angle = angle_value * 0.01
+        return angle
 
 

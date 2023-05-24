@@ -166,6 +166,13 @@ class RMDX:
         command = getValueConfig(self.header, param)
         message = [command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         return self.sendToMotor(motor_id, message)
+    
+    def getMultiTurnAngle(self,motor_id):
+        param = 'encoder.read.multiTurnsAngle'
+        command = getValueConfig(self.header, param)
+        message = [command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        return self.sendToMotor(motor_id, message)
+
 
     # ----- error ---------------------------
 
