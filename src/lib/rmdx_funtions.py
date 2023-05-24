@@ -70,6 +70,7 @@ class RMDX:
             self.bus.send(msg)
             time.sleep(0.1)
             print("MENSAJE ENVIADO: " + str(msg.data))
+            print("\n")
 
             # ------------------ read message ----------------------
             receive_message = self.bus.recv(10.0)

@@ -94,11 +94,12 @@ def send_motion(motores):
     for motor in motores:
         angulo = int(input("angulo deseado " + str(motor) + ": "))
         angulos.append(angulo)
-        # speed = int(input("velocidad deseada " + str(motor) + ": "))
-        # speeds.append(speed)
-    speeds.append(1000)
-    speeds.append(1000)
-    speeds.append(1000)
+        speed = int(input("velocidad deseada " + str(motor) + ": "))
+        speeds.append(speed)
+        # speeds.append(100)
+    
+    # speeds.append(100)
+    # speeds.append(100)
     #Tareas en paralelo
     with concurrent.futures.ThreadPoolExecutor() as executor:
         movimiento = [] 
@@ -158,13 +159,12 @@ if __name__ == "__main__":
     rmdx = RMDX()
     motor_list = rmdx.getMotorList()
     print("MOTORES DISPONIBLES: ", motor_list)
+    motores= list()
+    index = int(input("seleccione cantidad de motores: " ))
+    for motor_id in motor_list[:index]:
+        motores.append(motor_id)
 
     while True:
-        motores= list()
-        index = int(input("seleccione cantidad de motores: " ))
-        for motor_id in motor_list[:index]:
-            motores.append(motor_id)
-
         menu()
         option = input("Seleccione una opcion: ")
         if option == "7":
