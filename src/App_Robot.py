@@ -54,12 +54,24 @@ def send_action_set_zero_motors(motors):
     print("sending command set zero")
 
 
+# ------------------------------------ Interface --------------------------------
+def menu():
+    print("********* MENU ***********")
+    print("\n")
+
+
+options = {
+
+}
+
 # --------------------------------------- MAIN ----------------------------------
 if __name__ == '__main__':
 
     # --------------- Raspberry configs --------------------
     # define pines here
-    # step 1: if all sensors equal 1 them set zero motors and reset motors
-    # step 2: send desired position
-    # step 3: stop motor when associated sensor A equal 1 or sensor B equal 1
-    print("APP RUNNING")
+
+    while True:
+        # step 1: if all sensors equal 1 them set zero motors and reset motors
+        # step 2: send desired position
+        # step 3: stop motor when associated sensor A equal 1 or sensor B equal 1
+        print("APP RUNNING")
