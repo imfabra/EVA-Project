@@ -14,3 +14,6 @@ rsn_pairwise=CCMP
 
 interface=wlan0
 dhcp-range=192.168.4.2,192.168.4.20,255.255.255.0,24h
+
+Job for hostapd.service failed because the control process exited with error code.
+See "systemctl status hostapd.service" and "journalctl -xe" for details.
