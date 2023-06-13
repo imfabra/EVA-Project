@@ -1,0 +1,11 @@
+<h1>Detalle de Movimiento</h1>
+<p>Descripción: {{ movimiento.descripcion }}</p>
+<p>Etiqueta: {{ movimiento.etiqueta }}</p>
+<h2>Submovimientos:</h2>
+<ul>
+    {% for submovimiento in movimiento.submovimiento_set.all %}
+        <li>{{ submovimiento }}</li>
+    {% empty %}
+        <li>No hay submovimientos disponibles para este movimiento.</li>
+    {% endfor %}
+</ul>

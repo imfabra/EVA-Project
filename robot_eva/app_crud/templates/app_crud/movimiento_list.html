@@ -1,0 +1,9 @@
+<h1>Lista de Movimientos</h1>
+<ul>
+    {% for movimiento in movimientos %}
+        <li><a href="{% url 'movimiento_detail' movimiento.id %}">{{ movimiento.descripcion }}</a></li>
+    {% empty %}
+        <li>No hay movimientos disponibles.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'movimiento_create' %}">Crear Movimiento</a>

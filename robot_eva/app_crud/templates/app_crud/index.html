@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CRUD de Robot</title>
+</head>
+<body>
+    <h1>Etiquetas</h1>
+    <ul>
+        {% for etiqueta in etiquetas %}
+            <li>{{ etiqueta.nombre }}</li>
+        {% empty %}
+            <li>No hay etiquetas disponibles.</li>
+        {% endfor %}
+    </ul>
+    <form method="get" action="{% url 'etiqueta_create' %}">
+        <button type="submit">Crear Etiqueta</button>
+    </form>
+
+    <h1>Movimientos</h1>
+    <ul>
+        {% for movimiento in movimientos %}
+            <li>{{ movimiento.descripcion }}</li>
+        {% empty %}
+            <li>No hay movimientos disponibles.</li>
+        {% endfor %}
+    </ul>
+    <form method="get" action="{% url 'movimiento_create' %}">
+        <button type="submit">Crear Movimiento</button>
+    </form>
+
+    <h1>Submovimientos</h1>
+    <ul>
+        {% for submovimiento in submovimientos %}
+            <li>Submovimiento {{ submovimiento.id }}</li>
+        {% empty %}
+            <li>No hay submovimientos disponibles.</li>
+        {% endfor %}
+    </ul>
+    <form method="get" action="{% url 'submovimiento_create' %}">
+        <button type="submit">Crear Submovimiento</button>
+    </form>
+</body>
+</html>
