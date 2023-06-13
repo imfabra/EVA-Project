@@ -1,0 +1,14 @@
+<h1>Lista de Etiquetas</h1>
+<ul>
+    {% for etiqueta in etiquetas %}
+        <li>
+            <a href="{% url 'etiqueta_detail' etiqueta.id %}">{{ etiqueta.nombre }}</a>
+            <a href="{% url 'etiqueta_update' etiqueta.id %}">Editar</a>
+            <a href="{% url 'etiqueta_delete' etiqueta.id %}">Eliminar</a>
+        </li>
+    {% empty %}
+        <li>No hay etiquetas disponibles.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'etiqueta_create' %}">Crear Etiqueta</a>
+

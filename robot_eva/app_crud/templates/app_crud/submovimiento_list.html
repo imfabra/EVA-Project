@@ -1,0 +1,9 @@
+<h1>Lista de Submovimientos</h1>
+<ul>
+    {% for submovimiento in submovimientos %}
+        <li><a href="{% url 'submovimiento_detail' submovimiento.id %}">Submovimiento {{ submovimiento.id }}</a></li>
+    {% empty %}
+        <li>No hay submovimientos disponibles.</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'submovimiento_create' %}">Crear Submovimiento</a>

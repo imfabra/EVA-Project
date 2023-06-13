@@ -1,0 +1,28 @@
+.range-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.range-control {
+    margin-bottom: 10px;
+}
+
+.range-control label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.range-control input[type="range"] {
+    width: 200px;
+}
+
+.range-control .range-value {
+    display: inline-block;
+    width: 30px;
+    text-align: center;
+    margin-left: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
