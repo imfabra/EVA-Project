@@ -142,8 +142,20 @@ def set_zero_motor(motor_id):
     decoi = deco()
     rmdx.setup()
     # motor_id = 0x141
+
+
     rmdx.setEncoderOffset(motor_id)
     #rmdx.offMotor(motor_id)
+
+def get_multiTurn_angle_value(motor_id):
+    rmdx = RMDX()
+    decoi = deco()
+    rmdx.setup()
+    #motor_id = 0x142
+    encoder = rmdx.getMultiTurnAngle(motor_id)
+    res_encoder = decoi.readMultiTurnAngle(encoder.data)
+    print("*********************************")
+    print("angle_value",res_encoder)
 
 def menu():
     print("1. Enviar Posicion Single Turn")
@@ -160,7 +172,7 @@ options = {
     "1" : send_pos,
     "2" : send_pos_multi_turns,
     "3" : send_speed,
-    "4" : read_encoder,
+    "4" : get_multiTurn_angle_value,
     "5" : stop_motor,
     "6" : send_pos_with_speed,
     "7" : off_motor,

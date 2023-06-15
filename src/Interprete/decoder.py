@@ -144,9 +144,19 @@ class deco:
         angle_value = (response[7] << 24) | (response[6] << 16) | (response[5] << 8) | response[4] 
         angle = angle_value * 0.01
         return angle
+    
+    def readSingleTurnAngle(self,response):
+        print("respuesta hexa",response)
+        angle_value = (response[7] << 8) | response[6]
+        print("Valor decimal",angle_value)
+        angle = angle_value * 0.01
+        return angle
 
 
     def getEncoderDataByte(self,encoder_value):
+
+        if(encoder_value < 0):
+            encoder_value = encoder_value*(-1)
         data_offset = bytearray([
                 encoder_value & 0xFF,
                 (encoder_value >> 8) & 0xFF,

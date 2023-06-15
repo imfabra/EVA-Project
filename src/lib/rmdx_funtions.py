@@ -39,6 +39,7 @@ class RMDX:
     def setup(self):
         # ----------------- setup can ------------------------------
         try:
+            os.system('sudo /sbin/ip link set can0 down')
             os.system('sudo /sbin/ip link set can0 up type can bitrate 1000000')
             # os.system('sudo ifconfig can0 up')
             time.sleep(0.1)
@@ -61,6 +62,7 @@ class RMDX:
 
     def sendToMotor(self, motor_id, data_command):
         # ----------------- send data to motor ---------------------
+        
         can_id = motor_id
         data = data_command
         msg = can.Message(arbitration_id=can_id, data=data, is_extended_id=False)
@@ -69,22 +71,28 @@ class RMDX:
             # send message
             self.bus.send(msg)
             time.sleep(0.1)
-            print("MENSAJE ENVIADO: " + str(msg.data))
-            print("\n")
+            # print("MENSAJE ENVIADO: " + str(msg.data))
+            # print("\n")
 
             # ------------------ read message ----------------------
             receive_message = self.bus.recv(10.0)
             if receive_message is None:
                 print('Timeout occurred, no message.')
                 os.system('sudo /sbin/ip link set can0 down')
+                self.bus.flush_tx_buffer()
                 self.bus.shutdown()
+                
 
             os.system('sudo /sbin/ip link set can0 down')
-            print("MENSAJE RECIVIDO : " + str(receive_message.data))
-            print("\n")
+            # print("MENSAJE RECIVIDO : " + str(receive_message.data))
+            # print("\n")
+            self.bus.flush_tx_buffer()
+            self.bus.shutdown()
             return receive_message
         finally:
+            self.bus.flush_tx_buffer()
             self.bus.shutdown()
+            
 
     # def sendToMultiMotor(self,motor_id)
 
@@ -183,6 +191,12 @@ class RMDX:
     
     def getMultiTurnAngle(self,motor_id):
         param = 'encoder.read.multiTurnsAngle'
+        command = getValueConfig(self.header, param)
+        message = [command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+        return self.sendToMotor(motor_id, message)
+    
+    def getSingleTurnAngle(self,motor_id):
+        param = 'encoder.read.singleTurnAngle'
         command = getValueConfig(self.header, param)
         message = [command, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
         return self.sendToMotor(motor_id, message)

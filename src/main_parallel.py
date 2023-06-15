@@ -52,9 +52,9 @@ def get_encoder_data(motores):
     rmdx = RMDX()
     decoi = deco()
     rmdx.setup()
-    # motor_id = 0x141
-    index = int(input("seleccione un motor (0 al 4): " ))
-    motor_id = motores[index]
+    motor_id = 0x144
+    # index = int(input("seleccione un motor (0 al 4): " ))
+    # motor_id = motores[index]
     encoder = rmdx.getEncoder(motor_id)
     res_encoder = decoi.readEncoderDatatoAngle(encoder.data)
 
@@ -82,7 +82,7 @@ def get_multiTurn_angle_value(motores):
     rmdx = RMDX()
     decoi = deco()
     rmdx.setup()
-    # motor_id = 0x141
+    #motor_id = 0x142
     index = int(input("seleccione un motor (0 al 4): " ))
     motor_id = motores[index]
     encoder = rmdx.getMultiTurnAngle(motor_id)
@@ -94,12 +94,19 @@ def set_zero_motor(motores):
     rmdx = RMDX()
     decoi = deco()
     rmdx.setup()
-    index = int(input("seleccione un motor (0 al 4): " ))
-    motor_id = motores[index]
-    encoder = rmdx.getMultiTurnEncoderOffset(motor_id)
-    res_encoder = decoi.readMultiTurnEncoderZeroOffset(encoder.data)
-    byte_value = decoi.getEncoderDataByte(res_encoder)
-    res = rmdx.setValueEncoderOffset(byte_value)
+    motor_id = 0x141
+    # index = int(input("seleccione un motor (0 al 4): " ))
+    # motor_id = motores[index]
+    # encoder = rmdx.getMultiTurnEncoderOffset(motor_id)
+    # print("Valor de Multi encoder actual: ",encoder.data)
+    # res_encoder = decoi.readMultiTurnEncoderZeroOffset(encoder.data)
+    # print("Valor de encoder actual: ",res_encoder)
+    # byte_value = decoi.getEncoderDataByte(res_encoder)
+    # print("Valor en BYTE encoder actual: ",byte_value)
+    # res = rmdx.setValueEncoderOffset(motor_id,byte_value)
+
+    
+    res = rmdx.setCurrentEncoderOffset(motor_id)
 
 
 # ------------------ Tareas Concurrentes -------------------------------
@@ -188,15 +195,16 @@ options = {
 
 
 if __name__ == "__main__":
-    rmdx = RMDX()
-    motor_list = rmdx.getMotorList()
-    print("MOTORES DISPONIBLES: ", motor_list)
-    motores= list()
-    index = int(input("seleccione cantidad de motores: " ))
-    for motor_id in motor_list[:index]:
-        motores.append(motor_id)
+    # rmdx = RMDX()
+    # motor_list = rmdx.getMotorList()
+    # print("MOTORES DISPONIBLES: ", motor_list)
+    # motores= list()
+    # index = int(input("seleccione cantidad de motores: " ))
+    # for motor_id in motor_list[:index]:
+    #     motores.append(motor_id)
 
     while True:
+        motores = [0x142]
         menu()
         option = input("Seleccione una opcion: ")
         if option == "9":
