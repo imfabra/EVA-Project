@@ -1,4 +1,4 @@
-gitrimport numpy as np
+import numpy as np
 from roboticstoolbox import DHRobot, RevoluteDH
 from spatialmath import SE3
 
@@ -54,20 +54,21 @@ class EVA(DHRobot):
         inch = 0.0254
 
         # robot length values (metres)
-        a = [0, -0.300, -0.200, 0, 0]
-        d = [0.1155, 0, 0, 0.066, 0.040]
+        a = [ 0, -0.300, -0.200, 0, 0]
+        d = [0.1155, 0, 0.066, 0, 0.205]
 
-        alpha = [-pi / 2, zero, zero, -pi / 2, zero]
+        alpha = [pi / 2, zero, zero, -pi / 2, zero]
+        theta = [pi / 2, -pi / 2, zero, pi / 2, zero]
         
         # mass data, no inertia available
         mass = [0.497137238, 0.83823869976, 1.03, 0.91761736451, 0.37557448236]
         
         #
         q_lim = [
-            [-180*deg, 180*deg],
-            [-120*deg, 120*deg],
-            [-120*deg, 120*deg],
-            [-120*deg, 120*deg],
+            [-118*deg, 118*deg],
+            [-108*deg, 126*deg],
+            [-159*deg, 159*deg],
+            [-170*deg, 170*deg],
             [-180*deg, 180*deg],
             ]
         
@@ -77,12 +78,13 @@ class EVA(DHRobot):
             [0.059549 , 0.148359 , 0.099393],
             [0.003394 , 0.397281, 0.0994],
             [0.063950 , 0.485, 0.091115 ],
+            
         ]
         links = []
 
         for j in range(5):
             link = RevoluteDH(
-                d=d[j], a=a[j], alpha=alpha[j],qlim=q_lim[j], m=mass[j], r=center_of_mass[j], G=1
+                offset=theta[j],d=d[j], a=a[j], alpha=alpha[j],qlim=q_lim[j], m=mass[j], r=center_of_mass[j], G=1
             )
             links.append(link)
 
@@ -107,4 +109,4 @@ if __name__ == "__main__":  # pragma nocover
 
     eva = EVA(symbolic=False)
     # print(eva)
-    #print(eva.dyntable())
+    # print(eva.dyntable())
