@@ -5,20 +5,34 @@ import concurrent.futures
 from lib.rmdx_funtions import RMDX 
 from Interprete.decoder import deco
 import os
-
+from cinematica.kine import Kine 
 
 
 # esqueleto base para tercera capa del framework del robot
-# --- CAPA N°3 CONTROL ---------------------
+# ----------------- kinematics funtions ----------
+def path_plannig(motors,speed):
+    kn = Kine()
+    start = list()
+    pos_final= list()
+    steps = 2
+    start = [0.0,0.0,0.0,0.0,0.0]
+    for motor in motors:
+        angulo_final = float(input(f"angulo final {motor} : "))
+        pos_final.append(angulo_final)
+    print("objetivo",pos_final)
+
+    sub_motion = kn.path_plannig(start,pos_final,steps)
+    for array in sub_motion:
+        send_motion(motors,array,speed)
+        # sleep(0.5)
+    start=pos_final
+    print("posicion inicial: ", start)
+
+
+
 
 # ------------------ control functions -----------
-def direct_kinematics():
-    print("run direct kinematics")
 
-
-def inverse_kinematics():
-    print("run inverse kinematics")
-    # code here
 
 def control_stop_motor(sensors, motors,states):
 
@@ -85,7 +99,7 @@ def send_speed(motor_id,speed):
     os.system('sudo /sbin/ip link set can0 down')
 
 def send_pos_with_speed(motor_id, value, speed):
-    print(f"sending {value} degrees to motor {motor_id} with {speed} rad/s")
+    # print(f"sending {value} degrees to motor {motor_id} with {speed} rad/s")
     rmdx = RMDX()
     decoi = deco()
     data_send = decoi.getDataDegreeWhitSpeed(value,speed)
@@ -100,7 +114,7 @@ def send_pos_with_speed(motor_id, value, speed):
 
 
 def reset_motor(motor_id):
-    print(f"applying reset to motor: {motor_id}")
+    # print(f"applying reset to motor: {motor_id}")
     rmdx = RMDX()
     rmdx.setup()
     rmdx.resetSystemMotor(motor_id)
@@ -142,7 +156,7 @@ def get_single_turn_angle_value(motors):
 
 
 def set_zero_motor(motor_id):
-    print(f"setting zero to motor: {motor_id}")
+    # print(f"setting zero to motor: {motor_id}")
     rmdx = RMDX()
     rmdx.setup()    
     res = rmdx.setCurrentEncoderOffset(motor_id)
@@ -151,7 +165,7 @@ def set_zero_motor(motor_id):
 # ---------------------------- parallel or concurrent functions -------------------
 
 def send_rotational_motion(motors,speeds):
-    print("sending rotational motion ..")
+    # print("sending rotational motion ..")
     #listas
     #Tareas en paralelo
     with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -213,7 +227,7 @@ def send_action_stop_motors(motors):
 
 
 def send_action_set_zero_motors(motors):
-    print("sending command set zero")
+    # print("sending command set zero")
     with concurrent.futures.ThreadPoolExecutor() as executor:
         action = [] 
         for motor in motors:
@@ -272,7 +286,7 @@ if __name__ == '__main__':
       zero_speed = [80.0,-20.0,32.0,-20.0,0.0] #velocidad minima motor 3 = 30
      # zero_speed = [20.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
       angulos_zero_kine =[-118.0,108.0,-159.0,20.0,0]
-      speed_zero_kine=[80.0,100.0,40.0,40.0,40.0]
+      speed_kine=[80.0,100.0,40.0,40.0,40.0]
 
     #   zero_speed = [15.0]
       
@@ -288,6 +302,8 @@ if __name__ == '__main__':
       sensor_trama_true=[0,0,0,0,0,0,0]
       sensor_trama_anterior=[0,0,0,0,0,0,0]
       sensor_trama_anterior_anterior=[0,0,0,0,0,0,0]
+
+      
 
 
       
@@ -310,18 +326,18 @@ if __name__ == '__main__':
                 control_set_zero_mode(motor_list)
                 
                 sleep(2)
-                send_motion_to_zero_kine(motor_list,angulos_zero_kine,speed_zero_kine)
+                send_motion_to_zero_kine(motor_list,angulos_zero_kine,speed_kine)
                 sleep(5)
                 control_set_zero_mode(motor_list)
                 sleep(1)
                 angulos_zero = [0.1,0.1,0.0,0.0,0.0]
-                send_motion(motor_list,angulos_zero,speed_zero_kine)
+                send_motion(motor_list,angulos_zero,speed_kine)
 
                 
                 #---------------------------------------------------
-                # while True:
+                while True:
                     # step 2: send desired position
-                    # send_motion(motor_list)
+                    path_plannig(motor_list,speed_kine)
                 enable = False
             else:
                 
