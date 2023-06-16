@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de ejes</title>
+
+    <!-- template_css_load.html -->
+    {% load static %}
+ 
+    {% block head %}
+    <link rel="stylesheet" href="{% static 'eva_joins/joins.css' %}">
+    {% endblock %}
+</head>
+<body>
+    <form method="post" action="{% url 'joins' %}">
+        {% csrf_token %}
+        <div class="range-controls">
+            {% for i in "01234" %}
+                <div class="range-control">
+                    <label for="range{{ i }}">Valor {{ i|add:1 }}</label>
+                    <input type="range" id="range{{ i }}" name="range{{ i }}" min="-90" max="90" value="0">
+                    <span class="range-value">0</span>
+                </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="save-button">Guardar</button>
+    </form>
+    {% if values %}
+        <h2>Valores guardados:</h2>
+        <ul>
+            {% for value in values %}
+                <li>{{ value }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
