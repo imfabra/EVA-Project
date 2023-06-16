@@ -1,15 +1,18 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from robot_eva.app_crud.models import *
-from robot_eva.app_crud.forms import *
 
-# Create your views here.
-# def motion_robot_details(request):
-#     if request.method == 'POST':
-# la idea aqui es hacer la siguiente sentencia:
-# SELECT  Movimientos.idEtiqueta, Etiquetas.nombre,Movimientos.idMovimiento,
-# Submovimientos.join1, Submovimientos.join2, Submovimientos.join3, Submovimientos.join4, Submovimientos.join5, Submovimientos.velocidad,
-# Submovimientos.tiempo, Submovimientos.orden, Movimientos.descripcion
-# FROM Movimientos
-# INNER JOIN Etiquetas ON Movimientos.idEtiqueta = Etiquetas.idEtiqueta
-# INNER JOIN Submovimientos ON Movimientos.idMovimiento = Submovimientos.idMovimiento;
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from app_crud.models import Etiqueta, Movimiento, Submovimiento
 
+@csrf_exempt
+def robot_motion_post(request):
+    if request.method == 'POST':
+        motion = request.body.decode('utf-8')
+        label = Etiqueta.objects.filter(nombre=motion)
+        response_data = {
+            'message': 'Petición recibida correctamente',
+            'Data': list(label.values())
+        }
+        return JsonResponse(response_data)
+    else:
+        return HttpResponse("Metodo no permitido")
