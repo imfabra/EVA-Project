@@ -20,12 +20,13 @@ def path_plannig(motors,speed):
         angulo_final = float(input(f"angulo final {motor} : "))
         pos_final.append(angulo_final)
     print("objetivo",pos_final)
+    pos_aux = pos_final.copy()
 
     sub_motion = kn.path_plannig(start,pos_final,steps)
     for array in sub_motion:
         send_motion(motors,array,speed)
         # sleep(0.5)
-    start=pos_final
+    start=pos_aux
     print("posicion inicial: ", start)
 
 
