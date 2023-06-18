@@ -7,13 +7,15 @@ class Etiquetas(models.Model):
     nombre = models.CharField(max_length=45)
     descripcion = models.CharField(max_length=45)
 
+
     def __str__(self):
         return self.nombre
 
 
 class Movimientos(models.Model):
     id_movimieto = models.BigAutoField(primary_key=True),
-    id_etiqueta = models.ForeignKey(Etiquetas, on_delete=models.CASCADE, verbose_name="Etiqueta relacionada")
+    # id_etiqueta = models.ForeignKey(Etiquetas, on_delete=models.CASCADE, verbose_name="Etiqueta relacionada")
+    etiquetas = models.ManyToManyField(Etiquetas, related_name='movimientos')
     descripcion = models.CharField(max_length=45)
     orden = models.IntegerField()
 
