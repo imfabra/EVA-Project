@@ -10,7 +10,7 @@ class Etiquetas(models.Model):
 
 class Movimientos(models.Model):
     id_movimieto = models.BigAutoField(primary_key=True),
-    id_etiqueta = models.ForeignKey(Etiquetas, on_delete=models.CASCADE,verbose_name="Etiqueta relacionada")
+    id_etiqueta = models.ForeignKey(Etiquetas, on_delete=models.CASCADE, verbose_name="Etiqueta relacionada")
     descripcion = models.CharField(max_length=45)
     orden = models.IntegerField()
 
@@ -18,10 +18,10 @@ class Movimientos(models.Model):
 class Submovimientos(models.Model):
     id_submovimiento = models.BigAutoField(primary_key=True)
     # id_movimiento = models.ForeignKey(Movimientos, on_delete=models.CASCADE)
-    id_movimiento = models.ManyToManyField(Movimientos,on_delete=models.CASCADE, verbose_name="Movimiento relacionado")
-    join_1 = models.DecimalField()
-    join_2 = models.DecimalField()
-    join_3 = models.DecimalField()
-    join_4 = models.DecimalField()
-    join_5 = models.DecimalField()
-    velocidad = models.DecimalField()
+    id_movimiento = models.ManyToManyField(Movimientos, verbose_name="Movimiento relacionado")
+    join_1 = models.DecimalField(max_digits=3, decimal_places=2)
+    join_2 = models.DecimalField(max_digits=3, decimal_places=2)
+    join_3 = models.DecimalField(max_digits=3, decimal_places=2)
+    join_4 = models.DecimalField(max_digits=3, decimal_places=2)
+    join_5 = models.DecimalField(max_digits=3, decimal_places=2)
+    velocidad = models.DecimalField(max_digits=3, decimal_places=2)
