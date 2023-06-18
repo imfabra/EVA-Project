@@ -38,9 +38,9 @@ def get_json_data(etiqueta):
     return data
 
 @csrf_exempt
-def robot_motion_post(request):
+def robot_motion_post(request, motion):
     if request.method == 'POST':
-        motion = request.body.decode('utf-8')
+        # motion = request.body.decode('utf-8')
         etiqueta = Etiquetas.objects.get(nombre=motion)
         data = get_json_data(etiqueta)
         response_data = {
