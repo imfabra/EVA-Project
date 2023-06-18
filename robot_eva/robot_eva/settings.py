@@ -96,7 +96,7 @@ WSGI_APPLICATION = 'robot_eva.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'EVA',
+        'NAME': 'EVA_pruebas',
         'USER': 'postgres',
         'PASSWORD': 'Cristian123',
         'HOST': 'localhost',
