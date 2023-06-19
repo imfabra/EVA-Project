@@ -1,4 +1,3 @@
-
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
@@ -6,13 +5,12 @@ from .models import *
 from django.db.models import F
 
 
-
 def get_json_data(etiqueta):
     data = []
     etiqueta_data = {
-        'nombre':etiqueta.nombre,
-        'descripcion':etiqueta.descripcion,
-        'movimientos':[]
+        'nombre': etiqueta.nombre,
+        'descripcion': etiqueta.descripcion,
+        'movimientos': []
     }
     movimientos = etiqueta.movimientos.all()
     for movimiento in movimientos:
@@ -37,6 +35,7 @@ def get_json_data(etiqueta):
     data.append(etiqueta_data)
     return data
 
+
 @csrf_exempt
 def robot_motion_post(request, motion):
     if request.method == 'POST':
@@ -50,3 +49,17 @@ def robot_motion_post(request, motion):
         return JsonResponse(response_data)
     else:
         return HttpResponse("Metodo no permitido")
+
+@csrf_exempt
+def robot_go_zero(request):
+    if request.method == 'GET':
+        response_data = {
+            'message': 'Petición recibida correctamente',
+        }
+        return JsonResponse(response_data)
+    else:
+        return HttpResponse("Metodo no permitido")
+
+
+
+

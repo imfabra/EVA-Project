@@ -8,8 +8,7 @@ import os
 from kinematics.kine import Kine
 
 
-# esqueleto base para tercera capa del framework del robot
-# ----------------- kinematics funtions ----------
+# ----------------- kinematics functions ----------
 class Robot:
 
     def __init__(self):
@@ -44,8 +43,6 @@ class Robot:
         state_m2 = False
         state_m3 = False
         self.states = [state_m0, state_m1, state_m2, state_m3]
-
-
 
     def path_plannig(self, motors, speed):
         kn = Kine()
@@ -264,7 +261,7 @@ class Robot:
             if sensor_trama_true == [0, 1, 0, 1, 1, 0, 1]:
                 self.control_set_zero_mode()
                 sleep(2)
-                self.send_motion_to_zero_kine(angulos_zero_kine,speed_kine)
+                self.send_motion_to_zero_kine(angulos_zero_kine, speed_kine)
                 sleep(5)
                 self.control_set_zero_mode()
                 sleep(1)
@@ -280,6 +277,8 @@ class Robot:
             sleep(0.1)
 
         print("Finish set zero")
+        message = "finis set zero"
+        return message
 
 # --------------------------------------- MAIN ----------------------------------
 # if __name__ == '__main__':
