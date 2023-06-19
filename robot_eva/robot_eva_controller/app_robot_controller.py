@@ -16,45 +16,36 @@ class Robot:
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)
         # Definicion sensores Numero de GPIO
-        button_on_of = 15
-        f_1 = 17
-        f_2 = 7
-        f_3 = 21
-        f_4 = 20
-        f_5 = 19
-        f_6 = 13
-        f_7 = 12
+        self.button_on_of = 15
+        self.f_1 = 17
+        self.f_2 = 7
+        self.f_3 = 21
+        self.f_4 = 20
+        self.f_5 = 19
+        self.f_6 = 13
+        self.f_7 = 12
         # Seteo de pines
-        GPIO.setup(button_on_of, GPIO.IN)
-        GPIO.setup(f_1, GPIO.IN)
-        GPIO.setup(f_2, GPIO.IN)
-        GPIO.setup(f_3, GPIO.IN)
-        GPIO.setup(f_4, GPIO.IN)
-        GPIO.setup(f_5, GPIO.IN)
-        GPIO.setup(f_6, GPIO.IN)
-        GPIO.setup(f_7, GPIO.IN)
-        # enable set zero rutine
-        self.enable = True
+        GPIO.setup(self.button_on_of, GPIO.IN)
+        GPIO.setup(self.f_1, GPIO.IN)
+        GPIO.setup(self.f_2, GPIO.IN)
+        GPIO.setup(self.f_3, GPIO.IN)
+        GPIO.setup(self.f_4, GPIO.IN)
+        GPIO.setup(self.f_5, GPIO.IN)
+        GPIO.setup(self.f_6, GPIO.IN)
+        GPIO.setup(self.f_7, GPIO.IN)
+
         # Motors id
         self.rmdx = RMDX()
         self.decoi = Deco()
         self.motor_list = self.rmdx.getMotorList()
-        # speed for set zero rutine
-        self.zero_speed = [80.0, -20.0, 32.0, -20.0, 0.0]  # velocidad minima motor 3 = 30
-        # zero_speed = [20.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
-        self.angulos_zero_kine = [-118.0, 108.0, -159.0, 20.0, 0]
-        self.speed_kine = [80.0, 100.0, 40.0, 40.0, 40.0]
-        #     send_rotational_motion(motor_list,zero_speed)
         # estados iniciales de stop
         state_m0 = False
         state_m1 = False
         state_m2 = False
         state_m3 = False
-        #
         self.states = [state_m0, state_m1, state_m2, state_m3]
-        self.sensor_trama_true = [0, 0, 0, 0, 0, 0, 0]
-        self.sensor_trama_anterior = [0, 0, 0, 0, 0, 0, 0]
-        self.sensor_trama_anterior_anterior = [0, 0, 0, 0, 0, 0, 0]
+
+
 
     def path_plannig(self, motors, speed):
         kn = Kine()
@@ -195,7 +186,7 @@ class Robot:
             # esperar a quee todas las tareas se completen
             concurrent.futures.wait(movimiento)
 
-    def send_motion_to_zero_kine(self,angulos, speeds):
+    def send_motion_to_zero_kine(self, angulos, speeds):
         motors = self.motor_list
         with concurrent.futures.ThreadPoolExecutor() as executor:
             movimiento = []
@@ -206,7 +197,7 @@ class Robot:
             # esperar a quee todas las tareas se completen
             concurrent.futures.wait(movimiento)
 
-    def send_motion(self,angulos, speeds):
+    def send_motion(self, angulos, speeds):
         motors = self.motor_list
         # Tareas en paralelo
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -248,8 +239,47 @@ class Robot:
             # esperar a quee todas las tareas se completen
             concurrent.futures.wait(action)
 
-# ------------------------------------ Interface --------------------------------
+    # ------------------------------------ Interface --------------------------------
+    def go_zero(self):
+        # enable set zero rutine
+        enable = True
+        # speed for set zero rutine
+        zero_speed = [80.0, -20.0, 32.0, -20.0, 0.0]  # velocidad minima motor 3 = 30
+        # zero_speed = [20.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
+        angulos_zero_kine = [-118.0, 108.0, -159.0, 20.0, 0]
+        speed_kine = [80.0, 100.0, 40.0, 40.0, 40.0]
+        sensor_trama_true = [0, 0, 0, 0, 0, 0, 0]
+        sensor_trama_anterior = [0, 0, 0, 0, 0, 0, 0]
+        self.send_rotational_motion(zero_speed)
 
+        while enable:
+            sensor_trama = [GPIO.input(self.f_1), GPIO.input(self.f_2), GPIO.input(self.f_3),
+                            GPIO.input(self.f_4), GPIO.input(self.f_5), GPIO.input(self.f_6),
+                            GPIO.input(self.f_7)]
+            for j in range(len(sensor_trama)):
+                if sensor_trama[j] == sensor_trama_anterior[j]:
+                    sensor_trama_true[j] = sensor_trama[j]
+                else:
+                    sensor_trama_true[j] = sensor_trama_anterior[j]
+            if sensor_trama_true == [0, 1, 0, 1, 1, 0, 1]:
+                self.control_set_zero_mode()
+                sleep(2)
+                self.send_motion_to_zero_kine(angulos_zero_kine,speed_kine)
+                sleep(5)
+                self.control_set_zero_mode()
+                sleep(1)
+                angulos_zero = [0.1, 0.1, 0.0, 0.0, 0.0]
+                self.send_motion(angulos_zero, speed_kine)
+                enable = False
+            else:
+                # print("********SEARCHING ZERO MODE*****")
+                print("lectura: ", sensor_trama_true)
+                sensor_trama_anterior = sensor_trama
+                self.control_stop_motor(sensor_trama)
+                enable = True
+            sleep(0.1)
+
+        print("Finish set zero")
 
 # --------------------------------------- MAIN ----------------------------------
 # if __name__ == '__main__':
