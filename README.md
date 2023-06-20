@@ -1,7 +1,7 @@
-<<<<<<< HEAD
+
 # Capa de Aplicativo Robot
 En esta capa se encuentra el framework final encargado de administrar el robot EVA
-=======
+
 # EVA-Project
 <details>
   <summary><h2>Clonar el repositorio con el método HTTP:</h2></summary>
@@ -121,4 +121,4 @@ En esta capa se encuentra el framework final encargado de administrar el robot E
 
 ¡Listo! Ahora has clonado el repositorio del proyecto utilizando el método SSH, te has cambiado a la rama "AppEva" y has instalado las dependencias requeridas. Ahora puedes comenzar a trabajar con el proyecto Django en la rama "AppEva".
 </details>
->>>>>>> 14c2920f7370c93b33a3709072c05737c8e0a326
+
