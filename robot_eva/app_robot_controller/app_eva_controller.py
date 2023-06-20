@@ -104,6 +104,7 @@ class Robot:
 
     # -------------------- motor functions ---------- -------------------
     def send_speed(self, motor_id, speed):
+        os.system('sudo /sbin/ip link set can0 down')
         value = float(speed)
         data_send = self.decoi.getDataSpeed(value)
         # inicializar motor
@@ -113,6 +114,7 @@ class Robot:
         os.system('sudo /sbin/ip link set can0 down')
 
     def send_pos_with_speed(self, motor_id, value, speed):
+        os.system('sudo /sbin/ip link set can0 down')
         # print(f"sending {value} degrees to motor {motor_id} with {speed} rad/s")
         data_send = self.decoi.getDataDegreeWhitSpeed(value, speed)
         # inicializar motor
@@ -270,13 +272,13 @@ class Robot:
                 enable = False
             else:
                 # print("********SEARCHING ZERO MODE*****")
-                print("lectura: ", sensor_trama_true)
+                # print("lectura: ", sensor_trama_true)
                 sensor_trama_anterior = sensor_trama
                 self.control_stop_motor(sensor_trama)
                 enable = True
             sleep(0.1)
 
-        print("Finish set zero")
+        print("******Finish set zero*******")
         message = "finis set zero"
         return message
 
