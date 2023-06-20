@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app_crud',
     'app_com_xcelera',
+    'app_robot_controller',
     
 ]
 

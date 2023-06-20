@@ -2,10 +2,10 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import concurrent.futures
-from lib.rmdx_funtions import RMDX
-from interpreter.decoder import Deco
+from .rmdx_funtions import RMDX
+from .decoder import Deco
 import os
-from kinematics.kine import Kine
+from .kine import Kine
 
 
 # ----------------- kinematics functions ----------
