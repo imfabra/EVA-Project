@@ -3,6 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .models import *
 from django.db.models import F
+from robot_eva_controller.app_robot_controller import Robot 
 
 
 def get_json_data(etiqueta):
@@ -52,7 +53,10 @@ def robot_motion_post(request, motion):
 
 @csrf_exempt
 def robot_go_zero(request):
+
+    robot = Robot()
     if request.method == 'GET':
+        robot.go_zero()
         response_data = {
             'message': 'Petición recibida correctamente',
         }

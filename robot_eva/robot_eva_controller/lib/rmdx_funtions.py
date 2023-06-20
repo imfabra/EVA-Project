@@ -60,17 +60,10 @@ class RMDX:
 
     # -------- sends command -------------------------
 
-    def sendToMotor(self, motor_id, data_command):
-        # ----------------- send data to motor ---------------------
-<<<<<<< HEAD:src/lib/rmdx_funtions.py
-        
-=======
-
->>>>>>> 3843b5aa77b6f8ba5553b9c875ff4e71345239a2:robot_eva/app_com_xcelera/robot_eva_controller/lib/rmdx_funtions.py
+    def sendToMotor(self, motor_id, data_command):   # ----------------- send data to motor ---------------------
         can_id = motor_id
         data = data_command
         msg = can.Message(arbitration_id=can_id, data=data, is_extended_id=False)
-
         try:
             # send message
             self.bus.send(msg)

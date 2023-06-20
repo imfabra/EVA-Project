@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app_crud',
     'app_com_xcelera',
+    
 ]
 
 MIDDLEWARE = [
@@ -97,8 +98,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'EVA_pruebas',
-        'USER': 'postgres',
-        'PASSWORD': 'Cristian123',
+        'USER': 'eva',
+        'PASSWORD': 'EVA123',
         'HOST': 'localhost',
         'PORT': '5432',
     }
