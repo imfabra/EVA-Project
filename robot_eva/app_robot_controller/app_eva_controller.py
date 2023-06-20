@@ -2,10 +2,9 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import concurrent.futures
-from .models import *
 from .rmdx_funtions import RMDX
 from .decoder import Deco
-import os
+import os                           
 from .kine import Kine
 
 
