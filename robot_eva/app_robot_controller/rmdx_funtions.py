@@ -40,7 +40,7 @@ class RMDX:
         # ----------------- setup can ------------------------------
         try:
             os.system('sudo /sbin/ip link set can0 down')
-            os.system('sudo /sbin/ip link set can0 up type can bitrate 12000000') #revisar por posible desbordeamiento de buffer
+            os.system('sudo /sbin/ip link set can0 up type can bitrate 1000000')
             # os.system('sudo ifconfig can0 up')
             time.sleep(0.1)
         except Exception as e:
@@ -70,7 +70,6 @@ class RMDX:
             time.sleep(0.1)
             # print("MENSAJE ENVIADO: " + str(msg.data))
             # print("\n")
-
             # ------------------ read message ----------------------
             receive_message = self.bus.recv(10.0)
             if receive_message is None:
@@ -78,9 +77,6 @@ class RMDX:
                 os.system('sudo /sbin/ip link set can0 down')
                 self.bus.flush_tx_buffer()
                 self.bus.shutdown()
-                
-
-
             os.system('sudo /sbin/ip link set can0 down')
             # print("MENSAJE RECIVIDO : " + str(receive_message.data))
             # print("\n")
