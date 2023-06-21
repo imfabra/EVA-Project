@@ -97,13 +97,13 @@ class Robot:
     def control_set_zero_mode(self):
         motor_list = self.motor_list
         self.send_action_set_zero_motors(motor_list)
-        sleep(1)
+        sleep(0.5)
         self.send_action_reset_motors(motor_list)
-        sleep(4)
+        sleep(2)
         self.send_action_set_zero_motors(motor_list)
-        sleep(1)
+        sleep(0.5)
         self.send_action_reset_motors(motor_list)
-        sleep(4)
+        sleep(2)
 
     # -------------------- motor functions ---------- -------------------
     def send_speed(self, motor_id, speed):
