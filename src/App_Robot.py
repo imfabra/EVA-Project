@@ -286,7 +286,7 @@ if __name__ == '__main__':
     #   motor_list = [0x144]
       #speed for set zero rutine
       zero_speed = [80.0,-20.0,32.0,-20.0,0.0] #velocidad minima motor 3 = 30
-        # zero_speed = [0.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
+    #   zero_speed = [0.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
       angulos_zero_kine =[-118.0,108.0,-159.0,20.0,0]
       speed_kine=[80.0,100.0,40.0,40.0,40.0]
 
@@ -305,56 +305,36 @@ if __name__ == '__main__':
       sensor_trama_anterior=[0,0,0,0,0,0,0]
       sensor_trama_anterior_anterior=[0,0,0,0,0,0,0]
 
-      
-
-
-      
-
       while enable:
             # step 1: if sensors equal 1 them set zero motors and reset motors
             # sensor trama
             sensor_trama = [GPIO.input(f_1),GPIO.input(f_2),GPIO.input(f_3),
                             GPIO.input(f_4),GPIO.input(f_5),GPIO.input(f_6),GPIO.input(f_7)]
             
-            for j in range(len(sensor_trama)):
-                    if sensor_trama[j]==sensor_trama_anterior[j]:
-                        sensor_trama_true[j]=sensor_trama[j]
-                    else:
-                        sensor_trama_true[j]=sensor_trama_anterior[j]
 
-            if sensor_trama_true == [0,1,0,1,1,0,1]:
-                    # print("*******SET ZERO ON******")
-                #-------------- set zero kinematics -------------------
-                control_set_zero_mode(motor_list)
-                
-                sleep(2)
-                send_motion_to_zero_kine(motor_list,angulos_zero_kine,speed_kine)
-                sleep(5)
-                control_set_zero_mode(motor_list)
-                sleep(1)
-                angulos_zero = [0.1,0.1,0.0,0.0,0.0]
-                send_motion(motor_list,angulos_zero,speed_kine)
-
-                
-                #---------------------------------------------------
-                while True:
-                    # step 2: send desired position
-                    path_plannig(motor_list,speed_kine)
+            if sensor_trama == [0,1,0,1,1,0,1]:
                 enable = False
+                break;
             else:
-                
                 # print("********SEARCHING ZERO MODE*****")
-                print("lectura: ",sensor_trama_true)
-                sensor_trama_anterior=sensor_trama
+                print("lectura: ",sensor_trama)
+                 # sensor_trama_anterior=sensor_trama
 
                 control_stop_motor(sensor_trama,motor_list,states)
                 enable = True
-            
-           
             # step 3: stop motor when associated sensor A equal 1 or sensor B equal 1
-
             sleep(0.1)
-      
+    
+
+      control_set_zero_mode(motor_list)
+      sleep(2)
+      send_motion_to_zero_kine(motor_list,angulos_zero_kine,speed_kine)
+      sleep(5)
+      control_set_zero_mode(motor_list)
+      sleep(1)
+      angulos_zero = [0.1,0.1,0.0,0.0,0.0]
+      send_motion(motor_list,angulos_zero,speed_kine) 
       print("Finish set zero")
+      
         
 
