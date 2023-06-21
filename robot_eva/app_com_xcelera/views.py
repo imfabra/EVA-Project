@@ -8,6 +8,7 @@ from django.db.models import F
 
 
 def get_json_data(etiqueta):
+    conn = Connection()
     data = []
     etiqueta_data = {
         'nombre': etiqueta.nombre,
@@ -32,6 +33,7 @@ def get_json_data(etiqueta):
                 'join_5': str(submovimiento.join_5),
                 'velocidad': str(submovimiento.velocidad)
             }
+            conn.send_pos_to_robot(submovimiento_data)
             movimiento_data['submovimientos'].append(submovimiento_data)
         etiqueta_data['movimientos'].append(movimiento_data)
     data.append(etiqueta_data)

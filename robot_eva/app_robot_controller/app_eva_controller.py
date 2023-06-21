@@ -108,7 +108,7 @@ class Robot:
         value = float(speed)
         data_send = self.decoi.getDataSpeed(value)
         # inicializar motor
-        self.rmdx.setup()
+        self.rmdx.setup()#revisar esta linea por posible desbordamiento del bus
         # motor_id = 0x141
         res = self.rmdx.setSpeedClosedLoop(motor_id, data_send)
         os.system('sudo /sbin/ip link set can0 down')
@@ -197,12 +197,13 @@ class Robot:
             # esperar a quee todas las tareas se completen
             concurrent.futures.wait(movimiento)
 
-    def send_motion(self, angulos, speeds):
+    def send_motion(self, angulos):
         motors = self.motor_list
+        speed_kine = [80.0, 100.0, 40.0, 40.0, 40.0]
         # Tareas en paralelo
         with concurrent.futures.ThreadPoolExecutor() as executor:
             movimiento = []
-            for motor, angulo, speed in zip(motors, angulos, speeds):
+            for motor, angulo, speed in zip(motors, angulos, speed_kine):
                 task = executor.submit(self.send_pos_with_speed, motor, angulo, speed)
                 movimiento.append(task)
 
