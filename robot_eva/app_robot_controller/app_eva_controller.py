@@ -259,35 +259,34 @@ class Robot:
         self.send_rotational_motion(zero_speed)
 
         while enable:
-            sensor_trama = [GPIO.input(self.f_1), GPIO.input(self.f_2), GPIO.input(self.f_3),
-                            GPIO.input(self.f_4), GPIO.input(self.f_5), GPIO.input(self.f_6),
-                            GPIO.input(self.f_7)]
-            for j in range(len(sensor_trama)):
-                if sensor_trama[j] == sensor_trama_anterior[j]:
-                    sensor_trama_true[j] = sensor_trama[j]
-                else:
-                    sensor_trama_true[j] = sensor_trama_anterior[j]
+            # step 1: if sensors equal 1 them set zero motors and reset motors
+            # sensor trama
+            sensor_trama = [GPIO.input(self.f_1),GPIO.input(self.f_2),GPIO.input(self.f_3),
+                            GPIO.input(self.f_4),GPIO.input(self.f_5),GPIO.input(self.f_6),GPIO.input(self.f_7)]
+            
 
-            if sensor_trama_true == [0, 1, 0, 1, 1, 0, 1]:
-                self.control_set_zero_mode()
-                sleep(2)
-                self.send_motion_to_zero_kine(angulos_zero_kine, speed_kine)
-                sleep(6)
-                self.control_set_zero_mode()
-                sleep(2)
-                angulos_zero = [0.1, 0.1, 0.0, 0.0, 0.0]
-                self.send_motion(angulos_zero)
+            if sensor_trama == [0,1,0,1,1,0,1]:
                 enable = False
+                break;
             else:
                 # print("********SEARCHING ZERO MODE*****")
-                print("lectura: ", sensor_trama_true)
-                sensor_trama_anterior = sensor_trama
+                print("lectura: ",sensor_trama)
+                 # sensor_trama_anterior=sensor_trama
+
                 self.control_stop_motor(sensor_trama)
                 enable = True
-            sleep(0.2)
-
-        print("******Finish set zero*******")
-        message = "finis set zero"
+            # step 3: stop motor when associated sensor A equal 1 or sensor B equal 1
+            sleep(0.1)
+        self.control_set_zero_mode()
+        sleep(2)
+        self.send_motion_to_zero_kine(angulos_zero_kine,speed_kine)
+        sleep(5)
+        self.control_set_zero_mode()
+        sleep(1)
+        angulos_zero = [0.1,0.1,0.0,0.0,0.0]
+        self.send_motion(angulos_zero)
+        message = "Finish set zero" 
+        # print("Finish set zero")
         return message
     
     def send_off_robot(self):
