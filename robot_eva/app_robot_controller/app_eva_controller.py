@@ -108,7 +108,7 @@ class Robot:
         value = float(speed)
         data_send = self.decoi.getDataSpeed(value)
         # inicializar motor
-        self.rmdx.setup()
+        self.rmdx.setup()#revisar esta linea por posible desbordamiento del bus
         # motor_id = 0x141
         res = self.rmdx.setSpeedClosedLoop(motor_id, data_send)
         os.system('sudo /sbin/ip link set can0 down')
