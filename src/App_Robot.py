@@ -287,7 +287,7 @@ if __name__ == '__main__':
       #speed for set zero rutine
       zero_speed = [80.0,-20.0,32.0,-20.0,0.0] #velocidad minima motor 3 = 30
     #   zero_speed = [0.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
-      angulos_zero_kine =[-118.0,108.0,-159.0,20.0,0]
+      angulos_zero_kine =[-118.0,109.0,-158.0,22.5,0]
       speed_kine=[80.0,100.0,40.0,40.0,40.0]
 
     #   zero_speed = [15.0]
