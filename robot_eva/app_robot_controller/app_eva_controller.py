@@ -35,6 +35,8 @@ class Robot:
 
         # Motors id
         self.rmdx = RMDX()
+        self.rmdx.setup()
+        print("seteado")
         self.decoi = Deco()
         self.motor_list = self.rmdx.getMotorList()
         # estados iniciales de stop
@@ -130,17 +132,18 @@ class Robot:
     def reset_motor(self, motor_id):
         # print(f"applying reset to motor: {motor_id}")
         
-        rmdx = self.rmdx
-        rmdx.setup()
-        rmdx.resetSystemMotor(motor_id)
+        # rmdx = self.rmdx
+        # rmdx.setup()
+        self.rmdx.resetSystemMotor(motor_id)
 
     def stop_motor(self, motor_id):
-        rmdx = self.rmdx
-        rmdx.setup()
-        rmdx.stopMotor(motor_id)
+        # rmdx = self.rmdx
+        self.rmdx.setup()
+        self.rmdx.stopMotor(motor_id)
 
     def off_motor(self, motor_id):
-        print(f"turning motor {motor_id} off")
+        self.rmdx.setup()
+        self.rmdx.offMotor(motor_id)
 
     def get_multi_turn_angle_value(self, motors):
         rmdx = self.rmdx
@@ -243,11 +246,12 @@ class Robot:
 
     # ------------------------------------ Interface --------------------------------
     def go_zero(self):
+        
         # enable set zero rutine
         enable = True
         # speed for set zero rutine
         zero_speed = [80.0, -20.0, 32.0, -20.0, 0.0]  # velocidad minima motor 3 = 30
-        # zero_speed = [20.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
+        # zero_speed = [0.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
         angulos_zero_kine = [-118.0, 108.0, -159.0, 20.0, 0]
         speed_kine = [80.0, 100.0, 40.0, 40.0, 40.0]
         sensor_trama_true = [0, 0, 0, 0, 0, 0, 0]
@@ -285,6 +289,20 @@ class Robot:
         print("******Finish set zero*******")
         message = "finis set zero"
         return message
+    
+    def send_off_robot(self):
+        motors = self.motor_list
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            action = []
+            for motor in motors:
+                task = executor.submit(self.off_motor, motor)
+                action.append(task)
+
+            # esperar a quee todas las tareas se completen
+            concurrent.futures.wait(action)
+        message = "robot off"
+        return message
+
 
 # --------------------------------------- MAIN ----------------------------------
 # if __name__ == '__main__':

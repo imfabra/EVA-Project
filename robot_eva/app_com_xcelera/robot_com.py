@@ -10,6 +10,9 @@ class Connection:
 
     def send_go_zero(self):
         return self.robot.go_zero()
+    
+    def send_off_robot(self):
+        return self.robot.send_off_robot()
 
     def send_pos_to_robot(self, joins_data):
         desired_pos = []

@@ -65,7 +65,19 @@ def robot_go_zero(request):
         return JsonResponse(response_data)
     else:
         return HttpResponse("Metodo no permitido")
-
+    
+@csrf_exempt
+def robot_off(request):
+    conn = Connection()
+    if request.method == 'GET':
+        msg = conn.send_off_robot()
+        response_data = {
+            'message': 'Peticion recibida correctamente',
+            'response': msg
+        }
+        return JsonResponse(response_data)
+    else:
+        return HttpResponse("Metodo no permitido")
 
 
 
