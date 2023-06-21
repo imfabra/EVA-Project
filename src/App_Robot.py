@@ -252,6 +252,7 @@ options = {
 # --------------------------------------- MAIN ----------------------------------
 if __name__ == '__main__':
       print("APP RUNNING")
+      
 
     # --------------- Raspberry configs --------------------
     # define pines here
@@ -285,7 +286,7 @@ if __name__ == '__main__':
     #   motor_list = [0x144]
       #speed for set zero rutine
       zero_speed = [80.0,-20.0,32.0,-20.0,0.0] #velocidad minima motor 3 = 30
-     # zero_speed = [20.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
+        # zero_speed = [0.0,0.0,0.0,0.0,0.0] #velocidad minima motor 3 = 30
       angulos_zero_kine =[-118.0,108.0,-159.0,20.0,0]
       speed_kine=[80.0,100.0,40.0,40.0,40.0]
 
