@@ -128,6 +128,7 @@ class Robot:
 
     def reset_motor(self, motor_id):
         # print(f"applying reset to motor: {motor_id}")
+        
         rmdx = self.rmdx
         rmdx.setup()
         rmdx.resetSystemMotor(motor_id)
