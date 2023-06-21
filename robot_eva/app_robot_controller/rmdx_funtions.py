@@ -40,7 +40,7 @@ class RMDX:
         # ----------------- setup can ------------------------------
         try:
             os.system('sudo /sbin/ip link set can0 down')
-            os.system('sudo /sbin/ip link set can0 up type can bitrate 1000000')
+            os.system('sudo /sbin/ip link set can0 up type can bitrate 1000000 restart-ms 100')
             # os.system('sudo ifconfig can0 up')
             time.sleep(0.1)
         except Exception as e:
@@ -49,6 +49,7 @@ class RMDX:
         try:
             # can connection config
             bus = can.interface.Bus(interface='socketcan', channel='can0')  # socketcan_native
+    
         except OSError:
             print('err: PiCAN board was not found')
             exit()
@@ -74,15 +75,17 @@ class RMDX:
             receive_message = self.bus.recv(10.0)
             if receive_message is None:
                 print('Timeout occurred, no message.')
-                os.system('sudo /sbin/ip link set can0 down')
+                # os.system('sudo /sbin/ip link set can0 down')
                 self.bus.flush_tx_buffer()
                 self.bus.shutdown()
-            os.system('sudo /sbin/ip link set can0 down')
+            # os.system('sudo /sbin/ip link set can0 down')
             # print("MENSAJE RECIVIDO : " + str(receive_message.data))
             # print("\n")
             self.bus.flush_tx_buffer()
             self.bus.shutdown()
             return receive_message
+        except can.CanError:
+            print("Message NOT sent")
         finally:
             self.bus.flush_tx_buffer()
             self.bus.shutdown()

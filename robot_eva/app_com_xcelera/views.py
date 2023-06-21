@@ -47,7 +47,7 @@ def robot_motion_post(request, motion):
         etiqueta = Etiquetas.objects.get(nombre=motion)
         data = get_json_data(etiqueta)
         response_data = {
-            'message': 'Petición recibida correctamente',
+            'message': 'Peticion recibida correctamente',
             'Data': list(data)
         }
         return JsonResponse(response_data)
