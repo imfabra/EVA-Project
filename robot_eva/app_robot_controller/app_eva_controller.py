@@ -246,7 +246,7 @@ class Robot:
 
     # ------------------------------------ Interface --------------------------------
     def go_zero(self):
-        
+        message = "Going to zero" 
         # enable set zero rutine
         enable = True
         # speed for set zero rutine
@@ -257,6 +257,8 @@ class Robot:
         sensor_trama_true = [0, 0, 0, 0, 0, 0, 0]
         sensor_trama_anterior = [0, 0, 0, 0, 0, 0, 0]
         self.send_rotational_motion(zero_speed)
+
+        # yield message
 
         while enable:
             # step 1: if sensors equal 1 them set zero motors and reset motors
@@ -277,6 +279,7 @@ class Robot:
                 enable = True
             # step 3: stop motor when associated sensor A equal 1 or sensor B equal 1
             sleep(0.1)
+
         self.control_set_zero_mode()
         sleep(2)
         self.send_motion_to_zero_kine(angulos_zero_kine,speed_kine)
