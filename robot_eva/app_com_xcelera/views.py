@@ -4,6 +4,9 @@ from django.http import JsonResponse
 from .models import *
 from .robot_com import Connection
 from django.db.models import F
+from .tasks import *
+
+
 
 
 
@@ -54,17 +57,43 @@ def robot_motion_post(request, motion):
     else:
         return HttpResponse("Metodo no permitido")
 
+# @csrf_exempt
+# def robot_go_zero(request):
+#     conn = Connection()
+#     if request.method == 'GET':
+#         conn.send_go_zero()
+#         response_data = {
+#             'message': 'Peticion recibida correctamente',
+#         }
+#         return JsonResponse(response_data)
+#     else:
+#         return HttpResponse("Metodo no permitido")
+    
 @csrf_exempt
 def robot_go_zero(request):
-    conn = Connection()
+    
     if request.method == 'GET':
-        conn.send_go_zero()
+        go_zero.apply_async(args=())
         response_data = {
-            'message': 'Petición recibida correctamente',
+            'message': 'Peticion recibida correctamente',
         }
         return JsonResponse(response_data)
     else:
         return HttpResponse("Metodo no permitido")
+    
+
+@csrf_exempt
+def position(request):
+    
+    if request.method == 'GET':
+        going_to_point.apply_async(args=())
+        response_data = {
+            'message': 'Peticion recibida correctamente',
+        }
+        return JsonResponse(response_data)
+    else:
+        return HttpResponse("Metodo no permitido")
+
     
 @csrf_exempt
 def robot_off(request):

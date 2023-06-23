@@ -45,6 +45,7 @@ class Kine:
         print(Ti[0])
 
     def path_plannig(self,pos_start,target,steps):
+        print("going to")
 
         pos_start[0] = pos_start[0]*(-1)
         pos_start[3] = pos_start[3]*(-1)
@@ -60,7 +61,6 @@ class Kine:
             result.append(j)
 
         return result
-
 
 
 

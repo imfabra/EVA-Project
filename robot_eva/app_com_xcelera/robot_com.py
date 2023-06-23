@@ -1,15 +1,17 @@
-from app_robot_controller.app_eva_controller import Robot
-
-
+# from app_robot_controller.app_eva_controller import main as main_zero
 # Aqui van todas laa funciones de comunicacion de xcelera con el robot
 
 class Connection:
 
     def __init__(self):
-        self.robot = Robot()
+        #self.robot = main()
+        pass
 
     def send_go_zero(self):
-        return self.robot.go_zero()
+        # main_zero()
+        #h1=threading.Thread(target=main())
+        #h1.start
+        pass
     
     def send_off_robot(self):
         return self.robot.send_off_robot()
