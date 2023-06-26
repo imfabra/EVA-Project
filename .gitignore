@@ -1,0 +1,18 @@
+# Archivos y carpetas generadas por Django
+*.pyc
+__pycache__/
+*.sqlite3
+
+# Configuración local
+.env
+
+# Dependencias de Python (cambia "venv" por el nombre de tu entorno virtual si es diferente)
+venv/
+.env/
+
+# Django Rest Framework
+rest_framework/
+
+# Otros archivos y carpetas generados por Django
+media/
+staticfiles/
