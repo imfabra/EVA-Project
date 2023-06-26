@@ -1,11 +1,10 @@
-#Aplicación de control para el robot
 import RPi.GPIO as GPIO 
 from time import sleep 
 import concurrent.futures
-from .rmdx_funtions import RMDX 
-from .decoder import Deco
+from rmdx_funtions import RMDX 
+from decoder import deco as Deco
 import os
-from .kine import Kine 
+from kine import Kine 
 
 
 # esqueleto base para tercera capa del framework del robot
@@ -317,7 +316,7 @@ def going_zero():#if __name__ == '__main__':
 
             if sensor_trama == [0,1,0,1,1,0,1]:
                 enable = False
-                break;
+                break
             else:
                 # print("********SEARCHING ZERO MODE*****")
                 print("lectura: ",sensor_trama)
@@ -338,3 +337,4 @@ def going_zero():#if __name__ == '__main__':
       angulos_zero = [0.1,0.1,0.0,0.0,0.0]
       send_motion(motor_list,angulos_zero,speed_kine) 
       print("Finish set zero")
+      
