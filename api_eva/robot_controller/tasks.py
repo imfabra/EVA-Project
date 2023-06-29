@@ -1,18 +1,23 @@
 from api_eva.celery import app
 from time import sleep
 from .modules.controller_func import path_plannig, going_zero
+from .modules.controll_kine import ControlKine
+
+last_angles = []
+speeds_motors = ControlKine()
 
 @app.task
 def mov_zero():
+    last_angles = [0] * 5
     going_zero()
     pass
 
 @app.task
 def mov_eva(**kwargs):
     print(kwargs)
-    angles = [kwargs['angulo1'], kwargs['angulo2'], kwargs['angulo3'], kwargs['angulo4'], kwargs['angulo5']]
-    speed = [kwargs['velocidad'], kwargs['velocidad'], kwargs['velocidad'], kwargs['velocidad'], kwargs['velocidad']]
-    #path_plannig(angles,speed)
+    angles, speeds = speeds_motors.speed_angles(last_angles ,[kwargs[f'angle{p+1}'] for p in range(5)], [kwargs['velocidad']]*5)
+    path_plannig(angles,speeds)
+    last_angles = [kwargs[f'angle{p+1}'] for p in range(5)]
 
 @app.task
 def sep_eva(**kwargs):
@@ -37,7 +42,7 @@ def sep_eva(**kwargs):
             angulos_lista.append(angulos)
             print(angulos)
             
-            path_plannig(angulos,lista_velocidades[0])
+            #path_plannig(angulos,lista_velocidades[0])
             sleep(4)
 
     print("--------------------------------")
