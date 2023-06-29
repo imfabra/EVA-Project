@@ -3,21 +3,20 @@ from time import sleep
 from .modules.controller_func import path_plannig, going_zero
 from .modules.controll_kine import ControlKine
 
-last_angles = []
 speeds_motors = ControlKine()
 
 @app.task
 def mov_zero():
-    last_angles = [0] * 5
+    speeds_motors.set_last_move([0]*5)
     going_zero()
     pass
 
 @app.task
 def mov_eva(**kwargs):
     print(kwargs)
-    angles, speeds = speeds_motors.speed_angles(last_angles ,[kwargs[f'angle{p+1}'] for p in range(5)], [kwargs['velocidad']]*5)
+    angles, speeds = speeds_motors.speed_angles((speeds_motors.get_last_move()), ([kwargs[f'angulo{p+1}'] for p in range(5)]), ([kwargs['velocidad']]*5))
     path_plannig(angles,speeds)
-    last_angles = [kwargs[f'angle{p+1}'] for p in range(5)]
+    speeds_motors.set_last_move([kwargs[f'angulo{p+1}'] for p in range(5)]) 
 
 @app.task
 def sep_eva(**kwargs):
