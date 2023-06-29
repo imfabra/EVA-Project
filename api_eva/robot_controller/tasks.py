@@ -1,10 +1,10 @@
 from api_eva.celery import app
 from time import sleep
-#from .modules.controller_func import path_plannig, going_zero
+from .modules.controller_func import path_plannig, going_zero
 
 @app.task
 def mov_zero():
-    #going_zero()
+    going_zero()
     pass
 
 @app.task
@@ -37,8 +37,8 @@ def sep_eva(**kwargs):
             angulos_lista.append(angulos)
             print(angulos)
             
-            #path_plannig(angulos,speed)
-            #sleep(4)
+            path_plannig(angulos,lista_velocidades[0])
+            sleep(4)
 
     print("--------------------------------")
     print(angulos_lista)

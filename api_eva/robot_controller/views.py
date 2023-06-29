@@ -26,7 +26,7 @@ class SecuenciaCombinadaView(viewsets.ModelViewSet):
 # Vista de ejecución del cero
 class GoZero(APIView):
     def get(self, request, *args, **kwargs):
-        #tasks.mov_zero.apply_async(args=())
+        tasks.mov_zero.apply_async(args=())
         
         data = {'message': 'Go Zero'}
         return Response(data)

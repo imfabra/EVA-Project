@@ -1,32 +1,54 @@
 import RPi.GPIO as GPIO 
 from time import sleep 
 import concurrent.futures
-from rmdx_funtions import RMDX 
-from decoder import deco as Deco
+from .rmdx_funtions import RMDX 
+from .decoder import deco as Deco
 import os
-from kine import Kine 
+from .kine import Kine 
 
 
 # esqueleto base para tercera capa del framework del robot
 # ----------------- kinematics funtions ----------
+
+# def path_plannig(degrees,speed):
+#     rmdx = RMDX()
+#     motors = rmdx.getMotorList()
+#     kn = Kine()
+#     start = list()
+#     pos_final= list()
+#     steps = 2
+#     start = [0.0,0.0,0.0,0.0,0.0]
+#     for degree in degrees:
+#         angulo_final = degree
+#         pos_final.append(angulo_final)
+#     print("objetivo",pos_final)
+#     pos_aux = pos_final.copy()
+
+#     sub_motion = kn.path_plannig(start,pos_final,steps)
+#     for array in sub_motion:
+#         send_motion(motors,array,speed)
+#         # sleep(0.5)
+#     start=pos_aux
+#     print("posicion inicial: ", start)
+
+
 def path_plannig(degrees,speed):
     rmdx = RMDX()
     motors = rmdx.getMotorList()
     kn = Kine()
-    start = list()
     pos_final= list()
     steps = 2
-    start = [0.0,0.0,0.0,0.0,0.0]
+    # start = [0.0,0.0,0.0,0.0,0.0]
     for degree in degrees:
         angulo_final = degree
         pos_final.append(angulo_final)
     print("objetivo",pos_final)
     pos_aux = pos_final.copy()
 
-    sub_motion = kn.path_plannig(start,pos_final,steps)
+    sub_motion = kn.path_plannig(get_actual_pos(motors),pos_final,steps)
     for array in sub_motion:
         send_motion(motors,array,speed)
-        # sleep(0.5)
+        sleep(0.5)
     start=pos_aux
     print("posicion inicial: ", start)
 
@@ -143,6 +165,50 @@ def get_multi_turn_angle_value(motors):
     res_encoder = decoi.readMultiTurnAngle(encoder.data)
     print("*********************************")
     print("angle_value",res_encoder)
+
+def get_multi_turn_angle_value(motors):
+    rmdx = RMDX()
+    decoi = Deco()
+    res_encoder=[0,0,0,0,0]
+    enc={"j1":"","j2":"","j3":"","j4":"","j5":""}
+    for j in range (5):
+        rmdx.setup()
+        motor_id = motors[j]
+        encoder = rmdx.getMultiTurnAngle(motor_id)
+        if (j==0 or j==3 or j==4):
+            res_encoder[j] = -1*(round((decoi.readMultiTurnAngle(encoder.data)),2))
+        else:
+            res_encoder[j] = round((decoi.readMultiTurnAngle(encoder.data)),2)
+        if((res_encoder[j]<-360) and (j==0 or j==3 or j==4 )):
+            res_encoder[j]=-1*res_encoder[j]
+            res_encoder[j]=round(42949673-res_encoder[j],2) 
+        elif ((res_encoder[j]>360) and (j==1 or j==2)):
+            res_encoder[j]=round((-1*(42949673-res_encoder[j])),2)
+        enc[f"j{j+1}"]=res_encoder[j]   
+
+
+    print("real_angle_value",res_encoder)
+    print("Json: ", enc)
+
+def get_actual_pos(motors):
+    rmdx = RMDX()
+    decoi = Deco()
+    res_encoder=[0,0,0,0,0]
+    for j in range (5):
+        rmdx.setup()
+        motor_id = motors[j]
+        encoder = rmdx.getMultiTurnAngle(motor_id)
+        if (j==0 or j==3 or j==4):
+            res_encoder[j] = -1*(round((decoi.readMultiTurnAngle(encoder.data)),2))
+        else:
+            res_encoder[j] = round((decoi.readMultiTurnAngle(encoder.data)),2)
+        if((res_encoder[j]<-360) and (j==0 or j==3 or j==4 )):
+            res_encoder[j]=-1*res_encoder[j]
+            res_encoder[j]=round(42949673-res_encoder[j],2) 
+        elif ((res_encoder[j]>360) and (j==1 or j==2)):
+            res_encoder[j]=round((-1*(42949673-res_encoder[j])),2)
+        
+    return res_encoder
 
 def get_single_turn_angle_value(motors):
     rmdx = RMDX()
