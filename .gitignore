@@ -2,6 +2,8 @@
 *.pyc
 __pycache__/
 *.sqlite3
+.DS_Store
+DS_Store
 
 # Configuración local
 .env
