@@ -7,16 +7,14 @@ speeds_motors = ControlKine()
 
 @app.task
 def mov_zero():
-    speeds_motors.set_last_move([0]*5)
     going_zero()
     pass
 
 @app.task
 def mov_eva(**kwargs):
     print(kwargs)
-    angles, speeds = speeds_motors.speed_angles((speeds_motors.get_last_move()), ([kwargs[f'angulo{p+1}'] for p in range(5)]), ([kwargs['velocidad']]*5))
-    path_plannig(angles,speeds)
-    speeds_motors.set_last_move([kwargs[f'angulo{p+1}'] for p in range(5)]) 
+    path_plannig(kwargs)
+    #speeds_motors.set_last_move([kwargs[f'angulo{p+1}'] for p in range(5)]) 
 
 @app.task
 def sep_eva(**kwargs):
@@ -41,8 +39,8 @@ def sep_eva(**kwargs):
             angulos_lista.append(angulos)
             print(angulos)
             
-            #path_plannig(angulos,lista_velocidades[0])
-            sleep(4)
+            # path_plannig(angulos,lista_velocidades[0])
+            # sleep(4)
 
     print("--------------------------------")
     print(angulos_lista)

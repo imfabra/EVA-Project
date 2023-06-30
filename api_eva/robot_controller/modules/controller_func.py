@@ -6,6 +6,9 @@ from .decoder import deco as Deco
 import os
 from .kine import Kine 
 
+from .controll_kine import ControlKine
+
+speeds_motors = ControlKine()
 
 # esqueleto base para tercera capa del framework del robot
 # ----------------- kinematics funtions ----------
@@ -32,26 +35,26 @@ from .kine import Kine
 #     print("posicion inicial: ", start)
 
 
-def path_plannig(degrees,speed):
+def path_plannig(kwargs):
     rmdx = RMDX()
     motors = rmdx.getMotorList()
     kn = Kine()
-    pos_final= list()
     steps = 2
+    start = get_actual_pos(motors)
+    angles, speeds = speeds_motors.speed_angles(start, [kwargs[f'angulo{p+1}'] for p in range(5)], ([kwargs['velocidad']]*5))
     # start = [0.0,0.0,0.0,0.0,0.0]
-    for degree in degrees:
-        angulo_final = degree
-        pos_final.append(angulo_final)
-    print("objetivo",pos_final)
-    pos_aux = pos_final.copy()
+    
+    # for degree in degrees:
+    #     angulo_final = degree
+    #     pos_final.append(angulo_final)
+    
+    print("objetivo",angles)
 
-    sub_motion = kn.path_plannig(get_actual_pos(motors),pos_final,steps)
+
+    sub_motion = kn.path_plannig(start,angles,steps)
     for array in sub_motion:
-        send_motion(motors,array,speed)
-        sleep(0.5)
-    start=pos_aux
-    print("posicion inicial: ", start)
-
+        send_motion(motors,array,speeds)
+        #sleep(0.5)
 
 
 

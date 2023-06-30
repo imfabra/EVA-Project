@@ -44,6 +44,7 @@ class RMDX:
             # os.system('sudo ifconfig can0 up')
             time.sleep(0.1)
         except Exception as e:
+            print("Excepcion setup")
             print(e)
 
         try:
@@ -53,6 +54,7 @@ class RMDX:
             print('err: PiCAN board was not found')
             exit()
         except Exception as e:
+            print("Excepcion setup")
             print(e)
 
         self.bus = bus
